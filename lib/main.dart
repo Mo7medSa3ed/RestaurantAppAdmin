@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/provider/special.dart';
-import 'package:resturantapp/screans/home.dart';
+import 'package:resturantapp/screans/splashScrean.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             ),
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: Home(),
+          home: SplashScrean(),
         ));
   }
 }

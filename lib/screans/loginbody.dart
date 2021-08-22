@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
+import 'package:resturantapp/components/primart_elevatedButtom.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/user.dart';
@@ -70,64 +71,19 @@ class _LoginBodyState extends State<LoginBody>
               SizedBox(
                 height: getProportionateScreenHeight(28),
               ),
-               CustumTextField(
+              CustumTextField(
                 validator: (String v) =>
                     v.isEmpty ? 'please enter your password !' : null,
                 hint: 'password',
                 icon: Icons.lock_outlined,
                 obsecure: true,
                 onchanged: (v) => v.toString().isNotEmpty ? password = v : null,
-              ), 
-              SizedBox(
-                height: getProportionateScreenHeight(16),
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                      value: remember,
-                      onChanged: (v) {
-                        setState(() {
-                          remember = v;
-                        });
-                      }),
-                  Text('Remember me',
-                      style: TextStyle(letterSpacing: 1, fontSize: 14)),
-                  /*  Spacer(),
-                  InkWell(
-                    child: Text(
-                      'Forget password?',
-                      style: TextStyle(color: red.withOpacity(0.7)),
-                    ),
-                  ) */
-                ],
               ),
               SizedBox(
                 height: getProportionateScreenHeight(40),
               ),
-              custumraisedButton('LOGIN', () async => await loginButton()),
-              SizedBox(
-                height: getProportionateScreenHeight(23),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('New user?',
-                      style: TextStyle(
-                          color: Kprimary.withOpacity(0.7), fontSize: 16)),
-                  InkWell(
-                    onTap: () {
-                      if (specials.isSignup) {
-                        specials.changeSignup(!(specials.isSignup));
-                        _controller.forward();
-                      }
-                    },
-                    child: Text(
-                      ' Signup',
-                      style: TextStyle(color: red.withOpacity(0.7)),
-                    ),
-                  )
-                ],
-              ),
+              PrimaryElevatedButton(
+                  text: 'LOGIN', onpressed: () async => await loginButton()),
             ],
           ),
         ));
@@ -136,16 +92,12 @@ class _LoginBodyState extends State<LoginBody>
   loginButton() async {
     if (formKey.currentState.validate()) {
       showDialogWidget(context);
-      User u = User(email: email, password: password);
+      User u = User(email: email.trim(), password: password.trim());
       final res = await API.loginUser(u);
       if (res.statusCode == 200) {
         final u = utf8.decode(res.bodyBytes);
-        if (remember) {
-          saveUserToshared(u, context);
-          saveUsertoAppdata(u, context);
-        } else {
-          saveUsertoAppdata(u, context);
-        }
+        saveUserToshared(u, context);
+        saveUsertoAppdata(u, context);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) => Home()),
             (Route<dynamic> route) => false);

@@ -42,11 +42,9 @@ class _SplashScreanState extends State<SplashScrean> {
   getData() async {
     appData = Provider.of<AppData>(context, listen: false);
     prfs = await SharedPreferences.getInstance();
-    prfs.clear();
     if (prfs.getString('user') != null) {
       User user = await getUserFromPrfs();
       User u = await API.getOneUser(user.id);
-      
       if (u != null || u.updatedAt == user.updatedAt) {
         appData.initLoginUser(u);
         Navigator.of(context)
@@ -56,8 +54,8 @@ class _SplashScreanState extends State<SplashScrean> {
             .pushReplacement(MaterialPageRoute(builder: (_) => LoginScrean()));
       }
     } else {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (_) =>  LoginScrean() ));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => LoginScrean()));
     }
   }
 

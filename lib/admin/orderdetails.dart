@@ -10,14 +10,14 @@ import 'package:resturantapp/provider/appdata.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 
-class OrderDetailsScrean extends StatefulWidget {
+class OrderDetailsScrean2 extends StatefulWidget {
   final id;
-  OrderDetailsScrean(this.id);
+  OrderDetailsScrean2(this.id);
   @override
-  _OrderDetailsScreanState createState() => _OrderDetailsScreanState();
+  _OrderDetailsScrean2State createState() => _OrderDetailsScrean2State();
 }
 
-class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
+class _OrderDetailsScrean2State extends State<OrderDetailsScrean2> {
   AppData app;
   User user;
 

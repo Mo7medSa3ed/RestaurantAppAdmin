@@ -51,17 +51,18 @@ class User {
       createdAt: jsondata['createdAt'],
       updatedAt: jsondata['updatedAt']);
   factory User.fromJson2(Map<String, dynamic> jsondata) => User(
-      id: jsondata['_id'],
-      name: jsondata['name'],
-      phone: jsondata['phone'],
-      gender: jsondata['gender'],
-      dob: jsondata['dob'],
-      email: jsondata['email'],
-      location: jsondata['location'],
-      avatar: jsondata['avatar'],
-      address: jsondata['address'],
-      createdAt: jsondata['createdAt'],
-      updatedAt: jsondata['updatedAt']);
+        id: jsondata['_id'],
+        name: jsondata['name'],
+        phone: jsondata['phone'],
+        gender: jsondata['gender'],
+        dob: jsondata['dob'],
+        email: jsondata['email'],
+        // location: jsondata['location'],
+        // avatar: jsondata['avatar'],
+        // address: jsondata['address'],
+        // createdAt: jsondata['createdAt'],
+        // updatedAt: jsondata['updatedAt']
+      );
 
   factory User.fromJsonReview(Map<String, dynamic> jsondata) => User(
         id: jsondata['id'],

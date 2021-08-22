@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
 import 'package:resturantapp/custum_widget.dart';
-import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/size_config.dart';
 import 'package:connectivity/connectivity.dart';
 
@@ -25,14 +22,7 @@ class _HomeState extends State<HomePage> {
     setState(() {});
   }
 
-  getData() async {
-    AppData appData = Provider.of<AppData>(context, listen: false);
-    await API.getAllDishes().then((value) => appData.initDishesList(value));
-    await API
-        .getAllCategories()
-        .then((value) => appData.initCategoryList(value));
-    setState(() {});
-  }
+  
 
   @override
   void initState() {

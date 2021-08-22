@@ -21,29 +21,6 @@ class _AllCategoryTableState extends State<AllCategoryTable> {
   var _controller = TextEditingController();
   Specials s;
   List<Categorys> categoryList = [];
-  AppData app;
-  @override
-  void initState() {
-    super.initState();
-    app = Provider.of<AppData>(context, listen: false);
-
-    categoryList = app.categoryList;
-    uds = UDS(
-        context: context,
-        categoryList: categoryList,
-        filtercategoryList: categoryList);
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    app = Provider.of<AppData>(context, listen: true);
-    categoryList = app.categoryList;
-    uds = UDS(
-        context: context,
-        categoryList: categoryList,
-        filtercategoryList: categoryList);
-  }
 
   void _sort<T>(
     Comparable<T> Function(Categorys d) getField,
@@ -64,50 +41,60 @@ class _AllCategoryTableState extends State<AllCategoryTable> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.only(left: 0, right: 0, bottom: 16, top: 8),
-        child: PaginatedDataTable(
-          rowsPerPage: _rowsPerPage,
-          onRowsPerPageChanged: (value) {
-            setState(() {
-              _rowsPerPage = value;
-            });
-          },
-          header: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            height: 50,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: greyw, borderRadius: BorderRadius.circular(10)),
-            child: Center(
-              child: buildTextField(),
+      child: Consumer<AppData>(
+        builder: (ctx, app, c) {
+          categoryList = app.categoryList;
+          uds = UDS(
+              context: context,
+              categoryList: categoryList,
+              filtercategoryList: categoryList);
+          return Container(
+            padding: EdgeInsets.only(left: 0, right: 0, bottom: 16, top: 8),
+            child: PaginatedDataTable(
+              rowsPerPage: _rowsPerPage,
+              onRowsPerPageChanged: (value) {
+                setState(() {
+                  _rowsPerPage = value;
+                });
+              },
+              header: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                height: 50,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: greyw, borderRadius: BorderRadius.circular(10)),
+                child: Center(
+                  child: buildTextField(),
+                ),
+              ),
+              sortColumnIndex: _sortColumnIndex == -1 ? null : _sortColumnIndex,
+              sortAscending: _sortAscending,
+              showCheckboxColumn: false,
+              source: uds,
+              columns: [
+                DataColumn(
+                  label: Text('Category Name'),
+                  onSort: (columnIndex, ascending) =>
+                      _sort<String>((d) => d.name, columnIndex, ascending),
+                ),
+                DataColumn(
+                  label: Text('N.O.Dishes'),
+                  onSort: (columnIndex, ascending) =>
+                      _sort<num>((d) => d.numOfDishes, columnIndex, ascending),
+                ),
+                DataColumn(
+                  label: Text('Date'),
+                  onSort: (columnIndex, ascending) =>
+                      _sort<String>((d) => d.updatedAt, columnIndex, ascending),
+                ),
+                DataColumn(
+                  label:
+                      Expanded(child: Center(child: Text('Update / Delete'))),
+                )
+              ],
             ),
-          ),
-          sortColumnIndex: _sortColumnIndex == -1 ? null : _sortColumnIndex,
-          sortAscending: _sortAscending,
-          showCheckboxColumn: false,
-          source: uds,
-          columns: [
-            DataColumn(
-              label: Text('Category Name'),
-              onSort: (columnIndex, ascending) =>
-                  _sort<String>((d) => d.name, columnIndex, ascending),
-            ),
-            DataColumn(
-              label: Text('N.O.Dishes'),
-              onSort: (columnIndex, ascending) =>
-                  _sort<num>((d) => d.numOfDishes, columnIndex, ascending),
-            ),
-            DataColumn(
-              label: Text('Date'),
-              onSort: (columnIndex, ascending) =>
-                  _sort<String>((d) => d.updatedAt, columnIndex, ascending),
-            ),
-            DataColumn(
-              label: Expanded(child: Center(child: Text('Update / Delete'))),
-            )
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -200,16 +187,6 @@ class UDS extends DataTableSource {
   @override
   int get selectedRowCount => _selectedCount;
 
-  // void _sort<T>(Comparable<T> Function(Categorys d) getField, bool ascending) {
-  //   categoryList.sort((a, b) {
-  //     final aValue = getField(a);
-  //     final bValue = getField(b);
-  //     return ascending
-  //         ? Comparable.compare(aValue, bValue)
-  //         : Comparable.compare(bValue, aValue);
-  //   });
-  //   notifyListeners();
-  // }
 
   filter(value) {
     if (value == "-1") {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/admin/allCategorysForAdmin.dart';
+import 'package:resturantapp/components/primary_flatButton.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/models/dish.dart';
@@ -21,12 +22,11 @@ class _AddDishScreanState extends State<AddDishScrean> {
   bool shadow = false;
   PickedFile image;
   AppData app;
-  TextEditingController controller = TextEditingController(text: '');
-  String name;
-  String desc;
-  num price;
+  var nameController = TextEditingController(text: '');
+  var descController = TextEditingController(text: '');
+  var priceController = TextEditingController(text: '');
+  var numOfPiecesController = TextEditingController(text: '');
   String selectedCategory;
-  num numOfPieces;
   final formKey = GlobalKey<FormState>();
   final sKey = GlobalKey<ScaffoldState>();
 
@@ -143,6 +143,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
                             height: getProportionateScreenHeight(30),
                           ),
                           CustumTextField(
+                            controller: nameController,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter your dish name !!'
                                 : null,
@@ -150,13 +151,12 @@ class _AddDishScreanState extends State<AddDishScrean> {
                             value: null,
                             icon: Icons.food_bank_outlined,
                             obsecure: false,
-                            onsaved: (v) =>
-                                v.toString().isNotEmpty ? name = v : null,
                           ),
                           SizedBox(
                             height: getProportionateScreenHeight(16),
                           ),
                           CustumTextField(
+                            controller: descController,
                             v: 0,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter your dish description !!'
@@ -165,13 +165,12 @@ class _AddDishScreanState extends State<AddDishScrean> {
                             value: null,
                             icon: Icons.food_bank_outlined,
                             obsecure: false,
-                            onsaved: (v) =>
-                                v.toString().isNotEmpty ? desc = v : null,
                           ),
                           SizedBox(
                             height: getProportionateScreenHeight(16),
                           ),
                           CustumTextField(
+                            controller: priceController,
                             v: 1,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter your dish price !!'
@@ -180,14 +179,12 @@ class _AddDishScreanState extends State<AddDishScrean> {
                             value: null,
                             icon: Icons.monetization_on_outlined,
                             obsecure: false,
-                            onsaved: (v) => v.toString().isNotEmpty
-                                ? price = double.parse(v.toString().trim())
-                                : null,
                           ),
                           SizedBox(
                             height: getProportionateScreenHeight(16),
                           ),
                           CustumTextField(
+                            controller: numOfPiecesController,
                             v: 1,
                             validator: (String v) => v.isEmpty
                                 ? 'Please enter number of pieces !!'
@@ -196,10 +193,6 @@ class _AddDishScreanState extends State<AddDishScrean> {
                             value: null,
                             icon: Icons.format_list_numbered_rounded,
                             obsecure: false,
-                            onsaved: (v) => v.toString().isNotEmpty
-                                ? numOfPieces =
-                                    double.parse(v.toString().trim())
-                                : null,
                           ),
                           SizedBox(
                             height: getProportionateScreenHeight(16),
@@ -289,10 +282,8 @@ class _AddDishScreanState extends State<AddDishScrean> {
                         ])))
           ],
         )),
-        buildFlatbutton(
-            text: 'ADD DISH',
-            context: context,
-            onpressed: () async => await addDish(context)),
+        PrimaryFlatButton(
+            text: 'ADD DISH', onPressed: () async => await addDish(context)),
       ],
     );
   }
@@ -376,10 +367,10 @@ class _AddDishScreanState extends State<AddDishScrean> {
       String name2 = image.path.split('/').last;
       FormData form = FormData.fromMap({
         'img': await MultipartFile.fromFile(image.path, filename: name2),
-        'numOfPieces': numOfPieces,
-        'name': name,
-        "desc": desc,
-        "price": price,
+        'numOfPieces': int.parse(numOfPiecesController.text.trim()),
+        'name': nameController.text.trim(),
+        "desc": descController.text.trim(),
+        "price": double.parse(priceController.text.trim()),
         'category': app.categoryList
             .firstWhere((e) =>
                 e.name.trim().toLowerCase() ==
@@ -388,8 +379,15 @@ class _AddDishScreanState extends State<AddDishScrean> {
       });
 
       Dio dio = new Dio();
-      final res = await dio
-          .post('https://resturant-app12.herokuapp.com/dishes/', data: form);
+      final res =
+          await dio.post('https://resturant-app12.herokuapp.com/dishes/',
+              options: Options(
+                headers: {
+                  Headers.wwwAuthenticateHeader:
+                      'x-auth-token ' + await getToken()
+                },
+              ),
+              data: form);
 
       if (res.statusCode == 200 || res.statusCode == 201) {
         final newDish = Dish.fromJson(res.data);
@@ -427,10 +425,10 @@ class _AddDishScreanState extends State<AddDishScrean> {
 
   reset() {
     image = null;
-    name = null;
-    desc = null;
-    numOfPieces = null;
-    price = null;
+    nameController.clear();
+    descController.clear();
+    numOfPiecesController.clear();
+    priceController.clear();
     selectedCategory = null;
   }
 }

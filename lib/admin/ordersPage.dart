@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
 import 'package:resturantapp/admin/orderdetails.dart';
+import 'package:resturantapp/components/primary_orders_widget.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
 import 'package:resturantapp/size_config.dart';
@@ -28,25 +29,19 @@ class _HomeState extends State<OrdersPage> {
     return addresses;
   }
 
-  g() async {
+  requestPermissions() async {
     await Geolocator.isLocationServiceEnabled();
     await Geolocator.requestPermission();
     await Geolocator.checkPermission();
   }
 
-  getallusers() async {
-    final res = await API.getAllUser();
-    if (res.length > 0) {
-      appData.initUserList(res);
-    }
-  }
+  
 
   @override
   void initState() {
     super.initState();
-    g();
+    requestPermissions();
     appData = Provider.of<AppData>(context, listen: false);
-    getallusers();
   }
 
   @override
@@ -59,449 +54,498 @@ class _HomeState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 3,
-        child: FutureBuilder(
-            future: API.getAllOrders(),
-            builder: (c, v) {
-              if (v.hasData) {
-                appData.initOrderList(v.data);
-                return Scaffold(
-                  body: TabBarView(
-                    physics: NeverScrollableScrollPhysics(),
-                    children: [
-                      body(
-                          0,
-                          appData.ordersList
-                              .where((e) =>
-                                  e['state'].toString().toLowerCase().trim() ==
-                                  'placed')
-                              .toList()),
-                      body(
-                          1,
-                          appData.ordersList
-                              .where((e) =>
-                                  e['state'].toString().toLowerCase().trim() ==
-                                      'confirmed' ||
-                                  e['state'].toString().toLowerCase().trim() ==
-                                      'onway')
-                              .toList()),
-                      body(
-                          2,
-                          appData.ordersList
-                              .where((e) =>
-                                  e['state'].toString().toLowerCase().trim() ==
-                                      'ready' ||
-                                  e['state'].toString().toLowerCase().trim() ==
-                                      'cancel')
-                              .toList()),
-                    ],
-                  ),
-                  appBar: AppBar(
-                    elevation: 2,
-                    backgroundColor: white.withOpacity(0.97),
-                    title: Text(
-                      'Orders',
-                      style: TextStyle(
-                          color: Kprimary,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    bottom: TabBar(
-                        indicatorColor: red,
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        indicatorWeight: 3,
-                        labelStyle: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                        unselectedLabelStyle: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w600),
-                        unselectedLabelColor: Kprimary.withOpacity(0.3),
-                        labelColor: red,
-                        tabs: [
-                          Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 12, bottom: 12),
-                              child: Text('New')),
-                          Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 12, bottom: 12),
-                              child: Text('Active')),
-                          Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 12, bottom: 12),
-                              child: Text('History')),
-                        ]),
-                  ),
-                );
-              } else {
-                return Scaffold(
-                  body: Center(
-                    child: Center(
-                        child: SpinKitCircle(
-                      color: Kprimary,
-                    )),
-                  ),
-                );
-              }
-            }));
-  }
-
-  Widget body(indx, list) {
-    SizeConfig().init(context);
-    // final hei = MediaQuery.of(context).size.height;
-    // final wid = MediaQuery.of(context).size.width;
-    int index = indx;
-
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (c, i) => index == 0
-          ? GestureDetector(
-              onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => OrderDetailsScrean(list[i]['_id']))),
-              child: neworderCard('Cancel', list[i]))
-          : index == 1
-              ? GestureDetector(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => OrderDetailsScrean(list[i]['_id']))),
-                  child: activeorderCard(list[i]))
-              : GestureDetector(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => OrderDetailsScrean(list[i]['_id']))),
-                  child: neworderCard(
-                      list[i]['state'].toString().toLowerCase().trim() ==
-                              'cancel'
-                          ? 'Canceled'
-                          : 'Delivered',
-                      list[i])),
-    );
-  }
-
-  Widget neworderCard(text, o) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4),
-      child: Card(
-        elevation: 2,
-        child: Column(
-          children: [
-            ListTile(
-              leading: Icon(
-                Icons.fastfood,
-                color: red,
-              ),
+        length: 4,
+        initialIndex: 0,
+        child: Scaffold(
+            appBar: AppBar(
               title: Text(
-                "OID ${o['_id']}",
-                overflow: TextOverflow.fade,
-                softWrap: false,
+                'All Orders',
                 style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.w600, color: Kprimary),
+                    fontWeight: FontWeight.w800, color: Kprimary, fontSize: 28),
               ),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  children: [
-                    Text(
-                      "Paymant",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Kprimary.withOpacity(0.4)),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      "\$ ${o['sum']}",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Kprimary),
-                    ),
-                  ],
-                ),
-              ),
-              trailing: ElevatedButton(
-                onPressed: text == 'Delivered' || text == 'Canceled'
-                    ? () {}
-                    : () async => cancelOrder(o['_id']),
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(red),
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)))),
-                child: Text(
-                  '$text',
-                  style: TextStyle(color: greyw),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            FutureBuilder(
-                future: getcurrantLocation(o['distLocation']),
-                builder: (c, s) {
-                  if (s.hasData) {
-                    return buildRowAddres(
-                      s.data,
-                    );
-                  } else {
-                    return Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      height: 40,
-                      color: greyw,
-                      child: Text(
-                        "loading.....",
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Kprimary),
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        textAlign: TextAlign.center,
-                      ),
-                    );
-                  }
-                })
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget activeorderCard(o) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4),
-      child: Card(
-        elevation: 2,
-        child: Column(
-          children: [
-            ListTile(
-              leading: Icon(
-                Icons.fastfood,
-                color: red,
-              ),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "OID ${o['_id']}",
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Kprimary),
+              bottom: TabBar(
+                unselectedLabelColor: Kprimary.withOpacity(0.6),
+                overlayColor: MaterialStateProperty.all(red),
+                indicatorColor: Kprimary,
+                unselectedLabelStyle: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Kprimary.withOpacity(0.6),
+                    fontSize: 14),
+                labelColor: Kprimary,
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.w800, color: Kprimary, fontSize: 16),
+                tabs: [
+                  Tab(
+                    text: "Recent",
                   ),
-                  SizedBox(
-                    height: 8,
+                  Tab(
+                    text: "Confirmed",
                   ),
-                  Text(
-                    "Delivery Name : Mohamed Saeed Eliwah",
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Kprimary.withOpacity(0.6)),
+                  Tab(
+                    text: "Delivered",
                   ),
-                ],
-              ),
-              trailing: Column(
-                children: [
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    "Paymant",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Kprimary.withOpacity(0.4)),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    "\$ ${o['sum']}",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Kprimary),
+                  Tab(
+                    text: "Canceled",
                   ),
                 ],
               ),
             ),
-            SizedBox(
-              height: 16,
-            ),
-            FutureBuilder(
-                future: getcurrantLocation(o['distLocation']),
-                builder: (c, s) {
-                  if (s.hasData) {
-                    print(s.data);
-                    return buildRowAddres(
-                      s.data,
-                    );
-                  } else {
-                    return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        height: 40,
-                        color: greyw,
-                        child: Text(
-                          "loading.....",
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Kprimary),
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: false,
-                          textAlign: TextAlign.center,
-                        ));
-                  }
-                })
-          ],
-        ),
-      ),
-    );
+            body: TabBarView(physics: BouncingScrollPhysics(),
+                //controller: controller,
+                children: [
+                  OrdersWidget('Placed'),
+                  OrdersWidget('Confirmed'),
+                  OrdersWidget('Delivered'),
+                  OrdersWidget('Canceled'),
+                ])));
   }
 
-  Widget buildRowAddres(List<Address> a) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      height: 40,
-      color: greyw,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              "Restaurant Address",
-              style: TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w500, color: Kprimary),
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.location_on,
-                  color: red,
-                ),
-                CircleAvatar(
-                  backgroundColor: red,
-                  radius: 2.5,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CircleAvatar(
-                  backgroundColor: red,
-                  radius: 2.5,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CircleAvatar(
-                  backgroundColor: red,
-                  radius: 2.5,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CircleAvatar(
-                  backgroundColor: red,
-                  radius: 2.5,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CircleAvatar(
-                  backgroundColor: red,
-                  radius: 2.5,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CircleAvatar(
-                  backgroundColor: red,
-                  radius: 2.5,
-                ),
-                Icon(
-                  Icons.navigation,
-                  color: red,
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              a.first.addressLine,
-              style: TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w500, color: Kprimary),
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return DefaultTabController(
+  //       length: 3,
+  //       child: FutureBuilder(
+  //           future: API.getAllOrders(),
+  //           builder: (c, v) {
+  //             if (v.hasData) {
+  //               appData.initOrderList(v.data);
+  //               return Scaffold(
+  //                 body: TabBarView(
+  //                   physics: NeverScrollableScrollPhysics(),
+  //                   children: [
+  //                     body(
+  //                         0,
+  //                         appData.ordersList
+  //                             .where((e) =>
+  //                                 e['state'].toString().toLowerCase().trim() ==
+  //                                 'placed')
+  //                             .toList()),
+  //                     body(
+  //                         1,
+  //                         appData.ordersList
+  //                             .where((e) =>
+  //                                 e['state'].toString().toLowerCase().trim() ==
+  //                                     'confirmed' ||
+  //                                 e['state'].toString().toLowerCase().trim() ==
+  //                                     'onway')
+  //                             .toList()),
+  //                     body(
+  //                         2,
+  //                         appData.ordersList
+  //                             .where((e) =>
+  //                                 e['state'].toString().toLowerCase().trim() ==
+  //                                     'ready' ||
+  //                                 e['state'].toString().toLowerCase().trim() ==
+  //                                     'cancel')
+  //                             .toList()),
+  //                   ],
+  //                 ),
+  //                 appBar: AppBar(
+  //                   elevation: 2,
+  //                   backgroundColor: white.withOpacity(0.97),
+  //                   title: Text(
+  //                     'Orders',
+  //                     style: TextStyle(
+  //                         color: Kprimary,
+  //                         fontSize: 28,
+  //                         fontWeight: FontWeight.w700),
+  //                   ),
+  //                   bottom: TabBar(
+  //                       indicatorColor: red,
+  //                       indicatorSize: TabBarIndicatorSize.tab,
+  //                       indicatorWeight: 3,
+  //                       labelStyle: TextStyle(
+  //                           fontSize: 16, fontWeight: FontWeight.w500),
+  //                       unselectedLabelStyle: TextStyle(
+  //                           fontSize: 15, fontWeight: FontWeight.w600),
+  //                       unselectedLabelColor: Kprimary.withOpacity(0.3),
+  //                       labelColor: red,
+  //                       tabs: [
+  //                         Padding(
+  //                             padding:
+  //                                 const EdgeInsets.only(top: 12, bottom: 12),
+  //                             child: Text('New')),
+  //                         Padding(
+  //                             padding:
+  //                                 const EdgeInsets.only(top: 12, bottom: 12),
+  //                             child: Text('Active')),
+  //                         Padding(
+  //                             padding:
+  //                                 const EdgeInsets.only(top: 12, bottom: 12),
+  //                             child: Text('History')),
+  //                       ]),
+  //                 ),
+  //               );
+  //             } else {
+  //               return Scaffold(
+  //                 body: Center(
+  //                   child: Center(
+  //                       child: SpinKitCircle(
+  //                     color: Kprimary,
+  //                   )),
+  //                 ),
+  //               );
+  //             }
+  //           }));
+  // }
 
-  cancelOrder(id) async {
-    CoolAlert.show(
-      context: context,
-      type: CoolAlertType.warning,
-      title: 'Cancel Order',
-      text: "Are you sure to cancel order ?",
-      barrierDismissible: false,
-      confirmBtnColor: red,
-      showCancelBtn: true,
-      onConfirmBtnTap: () async {
-        Navigator.of(context).pop();
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.loading,
-          text: "loading please wait....",
-          barrierDismissible: false,
-        );
-        final reqData = {"state": "cancel"};
-        final res = await API.patchOrder(reqData, id);
-        if (res.statusCode == 200 || res.statusCode == 201) {
-          Navigator.of(context).pop();
-          final body = utf8.decode(res.bodyBytes);
-          final parsed = json.decode(body);
-          appData.updateOrder(parsed);
+  // Widget body(indx, list) {
+  //   SizeConfig().init(context);
+  //   // final hei = MediaQuery.of(context).size.height;
+  //   // final wid = MediaQuery.of(context).size.width;
+  //   int index = indx;
 
-          CoolAlert.show(
-              context: context,
-              type: CoolAlertType.success,
-              animType: CoolAlertAnimType.slideInUp,
-              title: 'Cancel Order',
-              text: "Order Canceled Successfully",
-              barrierDismissible: false,
-              confirmBtnColor: Kprimary,
-              onConfirmBtnTap: () => Navigator.of(context).pop());
-        } else {
-          Navigator.of(context).pop();
-          CoolAlert.show(
-              context: context,
-              type: CoolAlertType.loading,
-              title: 'Error',
-              text: "some thing went error !!",
-              barrierDismissible: false,
-              showCancelBtn: true);
-        }
-      },
-    );
-  }
+  //   return ListView.builder(
+  //     itemCount: list.length,
+  //     itemBuilder: (c, i) => index == 0
+  //         ? GestureDetector(
+  //             onTap: () => Navigator.of(context).push(MaterialPageRoute(
+  //                 builder: (_) => OrderDetailsScrean(list[i]['_id']))),
+  //             child: neworderCard('Cancel', list[i]))
+  //         : index == 1
+  //             ? GestureDetector(
+  //                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
+  //                     builder: (_) => OrderDetailsScrean(list[i]['_id']))),
+  //                 child: activeorderCard(list[i]))
+  //             : GestureDetector(
+  //                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
+  //                     builder: (_) => OrderDetailsScrean(list[i]['_id']))),
+  //                 child: neworderCard(
+  //                     list[i]['state'].toString().toLowerCase().trim() ==
+  //                             'cancel'
+  //                         ? 'Canceled'
+  //                         : 'Delivered',
+  //                     list[i])),
+  //   );
+  // }
+
+  // Widget neworderCard(text, o) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4),
+  //     child: Card(
+  //       elevation: 2,
+  //       child: Column(
+  //         children: [
+  //           ListTile(
+  //             leading: Icon(
+  //               Icons.fastfood,
+  //               color: red,
+  //             ),
+  //             title: Text(
+  //               "OID ${o['_id']}",
+  //               overflow: TextOverflow.fade,
+  //               softWrap: false,
+  //               style: TextStyle(
+  //                   fontSize: 16, fontWeight: FontWeight.w600, color: Kprimary),
+  //             ),
+  //             subtitle: Padding(
+  //               padding: const EdgeInsets.only(top: 8.0),
+  //               child: Row(
+  //                 children: [
+  //                   Text(
+  //                     "Paymant",
+  //                     style: TextStyle(
+  //                         fontSize: 16,
+  //                         fontWeight: FontWeight.w600,
+  //                         color: Kprimary.withOpacity(0.4)),
+  //                   ),
+  //                   SizedBox(
+  //                     width: 20,
+  //                   ),
+  //                   Text(
+  //                     "\$ ${o['sum']}",
+  //                     style: TextStyle(
+  //                         fontSize: 16,
+  //                         fontWeight: FontWeight.w500,
+  //                         color: Kprimary),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //             trailing: ElevatedButton(
+  //               onPressed: text == 'Delivered' || text == 'Canceled'
+  //                   ? () {}
+  //                   : () async => cancelOrder(o['_id']),
+  //               style: ButtonStyle(
+  //                   backgroundColor: MaterialStateProperty.all(red),
+  //                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
+  //                       borderRadius: BorderRadius.circular(8)))),
+  //               child: Text(
+  //                 '$text',
+  //                 style: TextStyle(color: greyw),
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             height: 16,
+  //           ),
+  //           FutureBuilder(
+  //               future: getcurrantLocation(o['distLocation']),
+  //               builder: (c, s) {
+  //                 if (s.hasData) {
+  //                   return buildRowAddres(
+  //                     s.data,
+  //                   );
+  //                 } else {
+  //                   return Container(
+  //                     padding: EdgeInsets.symmetric(horizontal: 8),
+  //                     width: double.infinity,
+  //                     alignment: Alignment.center,
+  //                     height: 40,
+  //                     color: greyw,
+  //                     child: Text(
+  //                       "loading.....",
+  //                       style: TextStyle(
+  //                           fontSize: 14,
+  //                           fontWeight: FontWeight.w500,
+  //                           color: Kprimary),
+  //                       overflow: TextOverflow.ellipsis,
+  //                       softWrap: false,
+  //                       textAlign: TextAlign.center,
+  //                     ),
+  //                   );
+  //                 }
+  //               })
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Widget activeorderCard(o) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4),
+  //     child: Card(
+  //       elevation: 2,
+  //       child: Column(
+  //         children: [
+  //           ListTile(
+  //             leading: Icon(
+  //               Icons.fastfood,
+  //               color: red,
+  //             ),
+  //             title: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 Text(
+  //                   "OID ${o['_id']}",
+  //                   overflow: TextOverflow.fade,
+  //                   softWrap: false,
+  //                   style: TextStyle(
+  //                       fontSize: 16,
+  //                       fontWeight: FontWeight.w600,
+  //                       color: Kprimary),
+  //                 ),
+  //                 SizedBox(
+  //                   height: 8,
+  //                 ),
+  //                 Text(
+  //                   "Delivery Name : Mohamed Saeed Eliwah",
+  //                   overflow: TextOverflow.fade,
+  //                   softWrap: false,
+  //                   style: TextStyle(
+  //                       fontSize: 14,
+  //                       fontWeight: FontWeight.w600,
+  //                       color: Kprimary.withOpacity(0.6)),
+  //                 ),
+  //               ],
+  //             ),
+  //             trailing: Column(
+  //               children: [
+  //                 SizedBox(
+  //                   height: 4,
+  //                 ),
+  //                 Text(
+  //                   "Paymant",
+  //                   style: TextStyle(
+  //                       fontSize: 16,
+  //                       fontWeight: FontWeight.w600,
+  //                       color: Kprimary.withOpacity(0.4)),
+  //                 ),
+  //                 SizedBox(
+  //                   height: 4,
+  //                 ),
+  //                 Text(
+  //                   "\$ ${o['sum']}",
+  //                   style: TextStyle(
+  //                       fontSize: 16,
+  //                       fontWeight: FontWeight.w500,
+  //                       color: Kprimary),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             height: 16,
+  //           ),
+  //           FutureBuilder(
+  //               future: getcurrantLocation(o['distLocation']),
+  //               builder: (c, s) {
+  //                 if (s.hasData) {
+  //                   print(s.data);
+  //                   return buildRowAddres(
+  //                     s.data,
+  //                   );
+  //                 } else {
+  //                   return Container(
+  //                       padding: EdgeInsets.symmetric(horizontal: 8),
+  //                       width: double.infinity,
+  //                       alignment: Alignment.center,
+  //                       height: 40,
+  //                       color: greyw,
+  //                       child: Text(
+  //                         "loading.....",
+  //                         style: TextStyle(
+  //                             fontSize: 14,
+  //                             fontWeight: FontWeight.w500,
+  //                             color: Kprimary),
+  //                         overflow: TextOverflow.ellipsis,
+  //                         softWrap: false,
+  //                         textAlign: TextAlign.center,
+  //                       ));
+  //                 }
+  //               })
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Widget buildRowAddres(List<Address> a) {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(horizontal: 8),
+  //     height: 40,
+  //     color: greyw,
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //       children: [
+  //         Expanded(
+  //           flex: 1,
+  //           child: Text(
+  //             "Restaurant Address",
+  //             style: TextStyle(
+  //                 fontSize: 14, fontWeight: FontWeight.w500, color: Kprimary),
+  //             overflow: TextOverflow.ellipsis,
+  //             softWrap: false,
+  //           ),
+  //         ),
+  //         Expanded(
+  //           flex: 1,
+  //           child: Row(
+  //             children: [
+  //               Icon(
+  //                 Icons.location_on,
+  //                 color: red,
+  //               ),
+  //               CircleAvatar(
+  //                 backgroundColor: red,
+  //                 radius: 2.5,
+  //               ),
+  //               SizedBox(
+  //                 width: 10,
+  //               ),
+  //               CircleAvatar(
+  //                 backgroundColor: red,
+  //                 radius: 2.5,
+  //               ),
+  //               SizedBox(
+  //                 width: 10,
+  //               ),
+  //               CircleAvatar(
+  //                 backgroundColor: red,
+  //                 radius: 2.5,
+  //               ),
+  //               SizedBox(
+  //                 width: 10,
+  //               ),
+  //               CircleAvatar(
+  //                 backgroundColor: red,
+  //                 radius: 2.5,
+  //               ),
+  //               SizedBox(
+  //                 width: 10,
+  //               ),
+  //               CircleAvatar(
+  //                 backgroundColor: red,
+  //                 radius: 2.5,
+  //               ),
+  //               SizedBox(
+  //                 width: 10,
+  //               ),
+  //               CircleAvatar(
+  //                 backgroundColor: red,
+  //                 radius: 2.5,
+  //               ),
+  //               Icon(
+  //                 Icons.navigation,
+  //                 color: red,
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         Expanded(
+  //           flex: 1,
+  //           child: Text(
+  //             a.first.addressLine,
+  //             style: TextStyle(
+  //                 fontSize: 14, fontWeight: FontWeight.w500, color: Kprimary),
+  //             overflow: TextOverflow.ellipsis,
+  //             softWrap: false,
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // cancelOrder(id) async {
+  //   CoolAlert.show(
+  //     context: context,
+  //     type: CoolAlertType.warning,
+  //     title: 'Cancel Order',
+  //     text: "Are you sure to cancel order ?",
+  //     barrierDismissible: false,
+  //     confirmBtnColor: red,
+  //     showCancelBtn: true,
+  //     onConfirmBtnTap: () async {
+  //       Navigator.of(context).pop();
+  //       CoolAlert.show(
+  //         context: context,
+  //         type: CoolAlertType.loading,
+  //         text: "loading please wait....",
+  //         barrierDismissible: false,
+  //       );
+  //       final reqData = {"state": "cancel"};
+  //       final res = await API.patchOrder(reqData, id);
+  //       if (res.statusCode == 200 || res.statusCode == 201) {
+  //         Navigator.of(context).pop();
+  //         final body = utf8.decode(res.bodyBytes);
+  //         final parsed = json.decode(body);
+  //         appData.updateOrder(parsed);
+
+  //         CoolAlert.show(
+  //             context: context,
+  //             type: CoolAlertType.success,
+  //             animType: CoolAlertAnimType.slideInUp,
+  //             title: 'Cancel Order',
+  //             text: "Order Canceled Successfully",
+  //             barrierDismissible: false,
+  //             confirmBtnColor: Kprimary,
+  //             onConfirmBtnTap: () => Navigator.of(context).pop());
+  //       } else {
+  //         Navigator.of(context).pop();
+  //         CoolAlert.show(
+  //             context: context,
+  //             type: CoolAlertType.loading,
+  //             title: 'Error',
+  //             text: "some thing went error !!",
+  //             barrierDismissible: false,
+  //             showCancelBtn: true);
+  //       }
+  //     },
+  //   );
+  // }
 
   /* acceptOrder(id) async {
     AppData app = Provider.of<AppData>(context, listen: false);

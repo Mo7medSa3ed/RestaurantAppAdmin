@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:resturantapp/models/dish.dart';
+import 'package:resturantapp/models/order.dart';
 import 'package:resturantapp/models/user.dart';
 import 'package:resturantapp/models/categorys.dart';
 
@@ -10,9 +11,22 @@ class AppData extends ChangeNotifier {
   List<Categorys> categoryList = [];
   List<dynamic> ordersList = [];
   List<User> usersList = [];
-
   List<Dish> cartList = [];
   String address;
+  Order detailsOrder;
+
+  changeOrderState(id) {
+    final idx = ordersList.indexWhere((e) => e['_id'] == id);
+    if (idx != -1) {
+      ordersList[idx]['state'] = 'cancel';
+    }
+    notifyListeners();
+  }
+
+  initOrder(detailsOrder) {
+    this.detailsOrder = detailsOrder;
+    // notifyListeners();
+  }
 
   initLoginUser(User user) {
     loginUser = user;
@@ -26,7 +40,7 @@ class AppData extends ChangeNotifier {
 
   initDishesList(List<Dish> list) {
     dishesList = list;
-    notifyListeners();
+    // notifyListeners();
   }
 
   initOrderList(List<dynamic> list) {
@@ -36,7 +50,6 @@ class AppData extends ChangeNotifier {
 
   initCategoryList(List<Categorys> list) {
     categoryList = list;
-    notifyListeners();
   }
 
   addDish(Dish d) {

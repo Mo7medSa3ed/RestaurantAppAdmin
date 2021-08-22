@@ -47,7 +47,7 @@ class AllDishesForAdminScrean extends StatelessWidget {
                 app.initDishesList(s.data);
                 return AllDishesTable();
               } else {
-                return Center(
+                return Center(  
                   child: SpinKitCircle(
                     color: Kprimary,
                   ),

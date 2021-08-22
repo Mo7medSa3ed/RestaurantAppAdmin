@@ -1,11 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
-import 'package:resturantapp/provider/special.dart';
 import 'package:resturantapp/screans/loginbody.dart';
-import 'package:resturantapp/screans/signupbody.dart';
 import 'package:resturantapp/size_config.dart';
 import 'package:connectivity/connectivity.dart';
 
@@ -57,14 +54,8 @@ class _LoginScreanState extends State<LoginScrean> {
                 padding: EdgeInsets.symmetric(
                     horizontal: getProportionateScreenWidth(28),
                     vertical: getProportionateScreenHeight(20)),
-                child: Selector<Specials, bool>(
-                  selector: (c, s) => s.isSignup,
-                  builder: (ctx, v, c) => Column(
-                    children: [
-                      buildmovetabs(v),
-                      v ? LoginBody() : SignupBody()
-                    ],
-                  ),
+                child: Column(
+                  children: [buildmovetabs(), LoginBody()],
                 ),
               ),
             )
@@ -72,7 +63,7 @@ class _LoginScreanState extends State<LoginScrean> {
     );
   }
 
-  Row buildmovetabs(v) {
+  Row buildmovetabs() {
     return Row(
       children: [
         Expanded(
@@ -80,9 +71,7 @@ class _LoginScreanState extends State<LoginScrean> {
           child: Container(
             padding: EdgeInsets.only(bottom: 15),
             decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                        color: v ? red : greyd, width: v ? 4 : 0.7))),
+                border: Border(bottom: BorderSide(color: red, width: 4))),
             child: Text(
               'Sign In',
               style: TextStyle(
@@ -91,21 +80,6 @@ class _LoginScreanState extends State<LoginScrean> {
             ),
           ),
         ),
-        Expanded(
-            flex: 1,
-            child: Container(
-              padding: EdgeInsets.only(bottom: 15),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                          color: v ? greyd : red, width: v ? 0.7 : 4))),
-              child: Text(
-                ' Register',
-                style: TextStyle(
-                    fontSize: 36, fontWeight: FontWeight.w900, color: Kprimary),
-                textAlign: TextAlign.end,
-              ),
-            ))
       ],
     );
   }

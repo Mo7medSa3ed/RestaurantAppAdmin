@@ -21,23 +21,21 @@ class _AllDishesTableState extends State<AllDishesTable> {
   var uds;
   var _controller = TextEditingController();
   Specials s;
-  AppData appData;
+  // AppData appData;
   List<Dish> dishList = [];
 
   @override
   void initState() {
     super.initState();
-    appData = Provider.of<AppData>(context, listen: false);
-    dishList = appData.dishesList;
-    uds = UDS(context: context, dishList: dishList, filterdishList: dishList);
+    // appData = Provider.of<AppData>(context, listen: false);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    appData = Provider.of<AppData>(context, listen: true);
-    dishList = appData.dishesList;
-    uds = UDS(context: context, dishList: dishList, filterdishList: dishList);
+    // appData = Provider.of<AppData>(context, listen: true);
+    // dishList = appData.dishesList;
+    // uds = UDS(context: context, dishList: dishList, filterdishList: dishList);
   }
 
   void _sort<T>(
@@ -61,8 +59,11 @@ class _AllDishesTableState extends State<AllDishesTable> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Expanded(
-        child: Container(
+      child: Consumer<AppData>(builder: (ctx, app, c) {
+        dishList = app.dishesList;
+        uds =
+            UDS(context: context, dishList: dishList, filterdishList: dishList);
+        return Container(
           width: double.infinity,
           padding: EdgeInsets.only(left: 0, right: 0, bottom: 16, top: 8),
           child: PaginatedDataTable(
@@ -123,8 +124,8 @@ class _AllDishesTableState extends State<AllDishesTable> {
               )
             ],
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
