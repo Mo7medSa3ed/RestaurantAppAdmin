@@ -16,6 +16,8 @@ class User {
   String avatar;
   List<dynamic> fav;
   List<Dish> history;
+  String adminId;
+  String type;
 
   User(
       {this.dob,
@@ -28,6 +30,8 @@ class User {
       this.avatar,
       this.address,
       this.img,
+      this.adminId,
+      this.type,
       this.location,
       this.history,
       this.name,
@@ -43,6 +47,8 @@ class User {
       email: jsondata['email'],
       location: jsondata['location'],
       avatar: jsondata['avatar'],
+      type: jsondata['type'],
+      adminId: jsondata['adminId'],
       password: jsondata['password'],
       address: jsondata['address'],
       fav: jsondata['fav'],
@@ -51,18 +57,19 @@ class User {
       createdAt: jsondata['createdAt'],
       updatedAt: jsondata['updatedAt']);
   factory User.fromJson2(Map<String, dynamic> jsondata) => User(
-        id: jsondata['_id'],
-        name: jsondata['name'],
-        phone: jsondata['phone'],
-        gender: jsondata['gender'],
-        dob: jsondata['dob'],
-        email: jsondata['email'],
-        // location: jsondata['location'],
-        // avatar: jsondata['avatar'],
-        // address: jsondata['address'],
-        // createdAt: jsondata['createdAt'],
-        // updatedAt: jsondata['updatedAt']
-      );
+      id: jsondata['_id'],
+      name: jsondata['name'],
+      phone: jsondata['phone'],
+      gender: jsondata['gender'],
+      dob: jsondata['dob'],
+      email: jsondata['email'],
+      location: jsondata['location'],
+      type: jsondata['type'],
+      adminId: jsondata['adminId'],
+      avatar: jsondata['avatar'],
+      address: jsondata['address'],
+      createdAt: jsondata['createdAt'],
+      updatedAt: jsondata['updatedAt']);
 
   factory User.fromJsonReview(Map<String, dynamic> jsondata) => User(
         id: jsondata['id'],
@@ -92,7 +99,7 @@ class User {
         'phone': phone,
         'gender': gender,
         'address': address,
-        // 'location': location,
+        'location': location,
         'dob': dob,
         'email': email
       };
@@ -106,5 +113,6 @@ class User {
         'name': name,
         'email': email,
         'password': password,
+        'adminId': '611bd2b0ae18382eeba4da11'
       };
 }

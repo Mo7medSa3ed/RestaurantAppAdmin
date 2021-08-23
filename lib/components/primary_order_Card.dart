@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:resturantapp/admin/orderDetails.dart';
-import 'package:resturantapp/admin/orderdetails.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/screans/ordertimeline.dart';
 

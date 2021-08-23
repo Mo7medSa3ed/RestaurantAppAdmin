@@ -20,6 +20,7 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(user.toJsonForLogin()));
+    saveToken(res.headers['x-auth-token']);
     return res;
   }
 
@@ -28,7 +29,7 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(user.toJsonForSignup()));
-
+    saveToken(res.headers['x-auth-token']);
     return res;
   }
 
@@ -64,27 +65,37 @@ class API {
     return User.fromJson(parsed);
   }
 
-  static Future<List<User>> getAllUser() async {
-    final response = await http.get(
+  static Future<dynamic> getAllUser() async {
+    final res = await http.get(
       '$_BaseUrl/users/',
       headers: await getHeaders(),
     );
-    final body = utf8.decode(response.bodyBytes);
-    final parsed = json.decode(body).cast<Map<String, dynamic>>();
-    return parsed.map<User>((dish) => User.fromJson2(dish)).toList();
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      final userList =
+          parsed.map<User>((dish) => User.fromJson2(dish)).toList();
+      return {"status": true, "data": userList};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   // Function For Dish
 
-  static Future<List<Dish>> getAllDishes() async {
+  static Future<dynamic> getAllDishes() async {
     final res = await http.get(
       '$_BaseUrl/dishes/',
       headers: await getHeaders(),
     );
-    final body = utf8.decode(res.bodyBytes);
-    final parsed = json.decode(body).cast<Map<String, dynamic>>();
-    print(parsed);
-    return parsed.map<Dish>((dish) => Dish.fromJson(dish)).toList();
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      final dishList = parsed.map<Dish>((dish) => Dish.fromJson(dish)).toList();
+      return {"status": true, "data": dishList};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   static Future<Dish> getOneDish(String id) async {
@@ -181,14 +192,20 @@ class API {
   }
 
   // function for categories
-  static Future<List<Categorys>> getAllCategories() async {
+  static Future<dynamic> getAllCategories() async {
     final res = await http.get(
       '$_BaseUrl/categories',
       headers: await getHeaders(),
     );
-    final body = utf8.decode(res.bodyBytes);
-    final parsed = json.decode(body).cast<Map<String, dynamic>>();
-    return parsed.map<Categorys>((dish) => Categorys.fromJson(dish)).toList();
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      final categoryList =
+          parsed.map<Categorys>((dish) => Categorys.fromJson(dish)).toList();
+      return {"status": true, "data": categoryList};
+    } else {
+      return {"status": false, "data": null};
+    }
   }
 
   static Future<http.Response> deleteCategory(String name) async {

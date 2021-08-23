@@ -36,12 +36,15 @@ saveUserToshared(user, context) async {
   prfs.setString('user', user);
 }
 
+saveToken(token) async {
+  final prfs = await SharedPreferences.getInstance();
+  prfs.setString('token', token);
+}
+
 Future<String> getToken() async {
   final prfs = await SharedPreferences.getInstance();
-  if (prfs.get('user') != null) {
-    return json.decode(prfs.get('user'))['token'] ?? '';
-  }
-  return '';
+  final token = prfs.get('token');
+  return token ?? '';
 }
 
 saveUsertoAppdata(user, context) {

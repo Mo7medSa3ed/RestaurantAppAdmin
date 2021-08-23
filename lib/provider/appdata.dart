@@ -38,7 +38,7 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
-  initDishesList(List<Dish> list) {
+  initDishesList(list) {
     dishesList = list;
     // notifyListeners();
   }

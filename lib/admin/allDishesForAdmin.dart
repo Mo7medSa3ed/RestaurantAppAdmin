@@ -40,14 +40,35 @@ class AllDishesForAdminScrean extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: FutureBuilder<List<Dish>>(
+        child: FutureBuilder<dynamic>(
             future: API.getAllDishes(),
             builder: (c, s) {
               if (s.hasData) {
-                app.initDishesList(s.data);
-                return AllDishesTable();
+                if (s.data['status'] && s.data['data'].length > 0) {
+                  app.initDishesList(s.data['data'] as List<Dish>);
+                  return AllDishesTable();
+                }
+                return Center(
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/images/List.png",
+                              fit: BoxFit.fill,
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              height: MediaQuery.of(context).size.width * 0.5,
+                            ),
+                            Text(
+                              "Your Dishes is Empty",
+                              style: TextStyle(color: grey, fontSize: 18),
+                            )
+                          ],
+                        )));
               } else {
-                return Center(  
+                return Center(
                   child: SpinKitCircle(
                     color: Kprimary,
                   ),

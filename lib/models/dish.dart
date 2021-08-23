@@ -34,7 +34,7 @@ class Dish {
       name: json['name'],
       desc: json['desc'],
       price: json['price'],
-      category: json['category'],
+      category: json['category']['name'],
       rating: json['rating'],
       numOfPieces: json['numOfPieces'],
       updatedAt: json['updatedAt']);

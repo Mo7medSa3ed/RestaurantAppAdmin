@@ -41,12 +41,33 @@ class AllCategoriesForAdminScrean extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: FutureBuilder<List<Categorys>>(
+        child: FutureBuilder<dynamic>(
             future: API.getAllCategories(),
             builder: (c, s) {
               if (s.hasData) {
-                app.initCategoryList(s.data);
-                return AllCategoryTable();
+                if (s.data['status'] && s.data['data'].length > 0) {
+                  app.initCategoryList(s.data['data'] as List<Categorys>);
+                  return AllCategoryTable();
+                }
+                return Center(
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/images/List.png",
+                              fit: BoxFit.fill,
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              height: MediaQuery.of(context).size.width * 0.5,
+                            ),
+                            Text(
+                              "Your Categories is Empty",
+                              style: TextStyle(color: grey, fontSize: 18),
+                            )
+                          ],
+                        )));
               } else {
                 return Center(
                   child: SpinKitCircle(

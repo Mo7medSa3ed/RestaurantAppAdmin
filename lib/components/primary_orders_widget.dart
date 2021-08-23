@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
 import 'package:resturantapp/components/primary_order_Card.dart';
@@ -82,7 +83,7 @@ class _OrdersWidgetState extends State<OrdersWidget> {
             return SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
               child: Center(
-                child: CircularProgressIndicator(),
+                child: SpinKitCircle(color: Kprimary,),
               ),
             );
           }
