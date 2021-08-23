@@ -72,8 +72,8 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                   print(detailsOrder.state);
                   app.initOrder(detailsOrder);
 
-                  check = app.detailsOrder.state.toLowerCase() == 'deliverd' ||
-                      app.detailsOrder.state.toLowerCase() == 'cancel';
+                  check = app.detailsOrder.state.toLowerCase() == 'delivered' ||
+                      app.detailsOrder.state.toLowerCase() == 'canceled';
                   return Consumer<AppData>(
                     builder: (ctx, app, c) => Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -295,7 +295,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
                         text: check ? "RE ORDER" : "CANCEL",
                         onpressed: () async => app.detailsOrder.state
                                         .toLowerCase() ==
-                                    'deliverd' ||
+                                    'delivered' ||
                                 app.detailsOrder.state.toLowerCase() == 'cancel'
                             ? null
                             : await cancelOrder(widget.id)))
