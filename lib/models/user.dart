@@ -104,14 +104,17 @@ class User {
         'email': email
       };
 
-  Map<String, dynamic> toJsonForLogin() =>
-      {'email': email, 'password': password, 'type': "Admin"};
+  Map<String, dynamic> toJsonForLogin() => {
+        'email': email,
+        'password': password,
+      };
 
   Map<String, dynamic> toJsonForSignup() => {
         'name': name,
         'email': email,
         'password': password,
-        'type': "Admin",
-        'adminId': '611bd2b0ae18382eeba4da11'
+        "phone": "01234567893"
+        // 'type': type,
+        //'adminId': '611bd2b0ae18382eeba4da11'
       };
 }

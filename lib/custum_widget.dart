@@ -120,3 +120,4 @@ showSnackbarWidget({msg, context, icon}) {
     barrierDismissible: false,
   );
 }
+

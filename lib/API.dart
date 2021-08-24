@@ -29,7 +29,8 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(user.toJsonForSignup()));
-    saveToken(res.headers['x-auth-token']);
+    // saveToken(res.headers['x-auth-token']);
+    print(res.body);
     return res;
   }
 
@@ -47,11 +48,11 @@ class API {
         data: form);
   }
 
-  static Future<http.Response> updateUser(User user, id) async {
+  static Future<http.Response> updateUser(user, id) async {
     final res = await http.patch('$_BaseUrl/users/$id',
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
-        body: json.encode(user.toJsonForUpdate()));
+        body: json.encode(user));
     return res;
   }
 

@@ -46,7 +46,8 @@ dependencies:
   google_map_polyline:
   permission:
   simple_autocomplete_formfield: 
-  connectivity: 
+  connectivity:
+  dropdown_below: 
 dev_dependencies:
   flutter_test:
     sdk: flutter

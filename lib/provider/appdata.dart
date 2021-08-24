@@ -35,7 +35,6 @@ class AppData extends ChangeNotifier {
 
   initUserList(user) {
     usersList = user;
-    notifyListeners();
   }
 
   initDishesList(list) {
@@ -64,19 +63,30 @@ class AppData extends ChangeNotifier {
 
   updateCategory(Categorys c) {
     final r = categoryList.indexWhere((e) => e.id == c.id);
-    categoryList[r] = c;
+    if (r != -1) {
+      categoryList[r] = c;
+      notifyListeners();
+    }
+  }
+
+  addUser(User user) {
+    usersList.add(user);
     notifyListeners();
   }
 
   updateDish(Dish d) {
     final r = dishesList.indexWhere((e) => e.id == d.id);
-    dishesList[r] = d;
-    notifyListeners();
+    if (r != -1) {
+      dishesList[r] = d;
+      notifyListeners();
+    }
   }
 
   updateOrder(dynamic o) {
     final r = ordersList.indexWhere((e) => e['_id'] == o['_id']);
-    ordersList[r] = o;
-    notifyListeners();
+    if (r != -1) {
+      ordersList[r] = o;
+      notifyListeners();
+    }
   }
 }
