@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:resturantapp/components/primart_elevatedButtom.dart';
-import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/custum_widget.dart';
 import 'package:resturantapp/size_config.dart';
 import 'package:connectivity/connectivity.dart';
