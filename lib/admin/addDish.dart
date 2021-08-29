@@ -359,7 +359,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
       formKey.currentState.save();
       CoolAlert.show(
         context: context,
-        animType: CoolAlertAnimType.slideInUp,
+        animType: CoolAlertAnimType.scale,
         type: CoolAlertType.loading,
         text: "loading please wait....",
         barrierDismissible: false,
@@ -379,19 +379,15 @@ class _AddDishScreanState extends State<AddDishScrean> {
       });
 
       Dio dio = new Dio();
-      final res =
-          await dio.post('https://resturant-app12.herokuapp.com/dishes/',
-              options: Options(
-                headers: {
-                  Headers.wwwAuthenticateHeader:
-                      'x-auth-token ' + await getToken()
-                },
-              ),
-              data: form);
-
+      dio.options.headers["x-auth-token"] = await getToken();
+      dio.options.headers["x-app-type"] = 'Admin';
+      final res = await dio
+          .post('https://resturant-app12.herokuapp.com/dishes/', data: form);
+      print(res.data);
       if (res.statusCode == 200 || res.statusCode == 201) {
+        res.data['category'] = {'name': selectedCategory};
         final newDish = Dish.fromJson(res.data);
-        newDish.category = selectedCategory;
+
         app.addDish(newDish);
 
         reset();
@@ -400,7 +396,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
         CoolAlert.show(
             context: context,
             type: CoolAlertType.success,
-            animType: CoolAlertAnimType.slideInUp,
+            animType: CoolAlertAnimType.scale,
             title: 'Add Dish',
             text: "Dish Added Successfully",
             barrierDismissible: false,
@@ -413,7 +409,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
         CoolAlert.show(
             context: context,
             type: CoolAlertType.loading,
-            animType: CoolAlertAnimType.slideInUp,
+            animType: CoolAlertAnimType.scale,
             title: 'Error',
             text: "some thing went error !!",
             barrierDismissible: false,

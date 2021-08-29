@@ -39,13 +39,10 @@ class API {
     FormData form = FormData.fromMap(
         {'avatar': await MultipartFile.fromFile(image.path, filename: name)});
     Dio dio = new Dio();
-    await dio.post('$_BaseUrl/users/change/avatar/$id',
-        options: Options(
-          headers: {
-            Headers.wwwAuthenticateHeader: 'x-auth-token ' + await getToken()
-          },
-        ),
-        data: form);
+    dio.options.headers["x-auth-token"] = await getToken();
+    dio.options.headers["x-app-type"] = 'Admin';
+
+    await dio.post('$_BaseUrl/users/change/avatar/$id', data: form);
   }
 
   static Future<http.Response> updateUser(user, id) async {
@@ -63,7 +60,7 @@ class API {
     );
     final body = utf8.decode(response.bodyBytes);
     final parsed = json.decode(body);
-    return User.fromJson(parsed);
+    return parsed != null ? User.fromJson(parsed) : null;
   }
 
   static Future<dynamic> getAllUser() async {
@@ -92,6 +89,7 @@ class API {
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      print(parsed);
       final dishList = parsed.map<Dish>((dish) => Dish.fromJson(dish)).toList();
       return {"status": true, "data": dishList};
     } else {
@@ -122,13 +120,10 @@ class API {
     FormData form = FormData.fromMap(
         {'img': await MultipartFile.fromFile(image.path, filename: name)});
     Dio dio = new Dio();
-    await dio.patch('$_BaseUrl/dishes/change-img/$id',
-        options: Options(
-          headers: {
-            Headers.wwwAuthenticateHeader: 'x-auth-token ' + await getToken()
-          },
-        ),
-        data: form);
+    dio.options.headers["x-auth-token"] = await getToken();
+    dio.options.headers["x-app-type"] = 'Admin';
+
+    await dio.patch('$_BaseUrl/dishes/change-img/$id', data: form);
   }
 
   static Future<http.Response> updateDish(
@@ -137,7 +132,7 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(updatedDish));
-
+    print(res);
     return res;
   }
 

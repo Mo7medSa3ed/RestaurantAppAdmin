@@ -8,6 +8,7 @@ import 'package:resturantapp/admin/allUsersTable.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/provider/appdata.dart';
 
+// ignore: must_be_immutable
 class AllUsersForAdminScrean extends StatelessWidget {
   AppData app;
 

@@ -350,10 +350,11 @@ class _UpdateDishState extends State<UpdateDish> {
       if (res.statusCode == 200 || res.statusCode == 201) {
         final body = utf8.decode(res.bodyBytes);
         final parsed = json.decode(body);
+        parsed['category'] = selectedCategory == null
+            ? {'name': widget.dish.category}
+            : {'name': selectedCategory};
         final d = Dish.fromJson(parsed);
 
-        d.category =
-            selectedCategory == null ? widget.dish.category : selectedCategory;
         app.updateDish(d);
         Navigator.of(context).pop();
         FocusScope.of(context).requestFocus(FocusNode());

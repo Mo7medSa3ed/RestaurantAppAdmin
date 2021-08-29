@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/screans/loginbody.dart';
 import 'package:resturantapp/screans/signupbody.dart';
-import 'package:resturantapp/size_config.dart';
 
 class AddUserScrean extends StatefulWidget {
   AddUserScrean({Key key}) : super(key: key);

@@ -113,8 +113,8 @@ class User {
         'name': name,
         'email': email,
         'password': password,
-        "phone": "01234567893"
+        "phone": phone,
         // 'type': type,
-        //'adminId': '611bd2b0ae18382eeba4da11'
+        'adminId': '612bdd8b9d150900166ffa46'
       };
 }
