@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:resturantapp/admin/allCategorysForAdmin.dart';
+import 'package:resturantapp/admin/allCopounsForAdmin.dart';
 import 'package:resturantapp/admin/allDishesForAdmin.dart';
 import 'package:resturantapp/admin/allUsersForAdmin.dart';
 import 'package:resturantapp/admin/ordersPage.dart';
@@ -16,9 +17,9 @@ class MainDrawer extends StatelessWidget {
             DrawerHeader(
                 margin: EdgeInsets.all(0),
                 child: UserAccountsDrawerHeader(
-
                   decoration: BoxDecoration(
-                      color: Kprimary.withOpacity(0.95), borderRadius: BorderRadius.circular(8)),
+                      color: Kprimary.withOpacity(0.95),
+                      borderRadius: BorderRadius.circular(8)),
                   accountName: Text(
                     "Mohamed Saeed",
                     style: TextStyle(fontSize: 14),
@@ -43,6 +44,10 @@ class MainDrawer extends StatelessWidget {
             ListTile(
               title: Text("All Orders"),
               onTap: () => go(OrdersPage(), context),
+            ),
+            ListTile(
+              title: Text("All Copouns"),
+              onTap: () => go(AllCopounsForAdminScrean(), context),
             ),
           ],
         ),

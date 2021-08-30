@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:resturantapp/models/copoun.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/order.dart';
 import 'package:resturantapp/models/user.dart';
@@ -12,6 +13,7 @@ class AppData extends ChangeNotifier {
   List<dynamic> ordersList = [];
   List<User> usersList = [];
   List<Dish> cartList = [];
+  List<Copoun> copounList = [];
   String address;
   Order detailsOrder;
 
@@ -50,6 +52,9 @@ class AppData extends ChangeNotifier {
   initCategoryList(List<Categorys> list) {
     categoryList = list;
   }
+  initCopounList(List<Copoun> list) {
+    copounList = list;
+  }
 
   addDish(Dish d) {
     dishesList.add(d);
@@ -58,6 +63,11 @@ class AppData extends ChangeNotifier {
 
   addtoCategory(c) {
     categoryList.add(c);
+    notifyListeners();
+  }
+  
+  addtoCopoun(c) {
+    copounList.add(c);
     notifyListeners();
   }
 

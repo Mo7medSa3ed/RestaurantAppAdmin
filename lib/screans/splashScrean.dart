@@ -42,7 +42,6 @@ class _SplashScreanState extends State<SplashScrean> {
   getData() async {
     appData = Provider.of<AppData>(context, listen: false);
     prfs = await SharedPreferences.getInstance();
-    prfs.clear();
     if (prfs.getString('user') != null) {
       User user = await getUserFromPrfs();
       User u = await API.getOneUser(user.id);

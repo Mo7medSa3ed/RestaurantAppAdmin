@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/categorys.dart';
+import 'package:resturantapp/models/copoun.dart';
 import 'package:resturantapp/models/dish.dart';
 import 'package:resturantapp/models/review.dart';
 import 'dart:convert';
@@ -204,9 +205,33 @@ class API {
     }
   }
 
+  static Future<dynamic> getAllCopouns() async {
+    final res = await http.get(
+      '$_BaseUrl/copouns',
+      headers: await getHeaders(),
+    );
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      final body = utf8.decode(res.bodyBytes);
+      final parsed = json.decode(body).cast<Map<String, dynamic>>();
+      final copounList =
+          parsed.map<Copoun>((dish) => Copoun.fromJson(dish)).toList();
+      return {"status": true, "data": copounList};
+    } else {
+      return {"status": false, "data": null};
+    }
+  }
+
   static Future<http.Response> deleteCategory(String name) async {
     final res = await http.delete(
       '$_BaseUrl/categories/$name',
+      headers: await getHeaders(),
+    );
+    return res;
+  }
+
+  static Future<http.Response> deleteCopoun(String id) async {
+    final res = await http.delete(
+      '$_BaseUrl/copouns/$id',
       headers: await getHeaders(),
     );
     return res;
@@ -218,6 +243,15 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(categories));
+
+    return res;
+  }
+
+  static Future<http.Response> addCopoun(Map<String, dynamic> copoun) async {
+    final res = await http.post('$_BaseUrl/copoun/',
+        encoding: Encoding.getByName("utf-8"),
+        headers: await getHeaders(),
+        body: json.encode(copoun));
 
     return res;
   }
