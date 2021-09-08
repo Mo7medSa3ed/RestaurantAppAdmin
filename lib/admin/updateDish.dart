@@ -325,6 +325,12 @@ class _UpdateDishState extends State<UpdateDish> {
         barrierDismissible: false,
       );
       var cat;
+      if (app.categoryList.length == 0) {
+        final response = await API.getAllCategories();
+        if (response['status']) {
+          app.initCategoryList(response['data']);
+        }
+      }
       if (selectedCategory == null) {
         cat = app.categoryList
             .firstWhere((e) =>

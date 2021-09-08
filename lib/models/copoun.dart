@@ -2,14 +2,14 @@ class Copoun {
   String id;
   String createdAt;
   String updatedAt;
-  String name;
-  String img;
-  num numOfDishes;
+  String text;
+  int duration;
+  num amount;
 
   Copoun(
-      {this.img,
-      this.name,
-      this.numOfDishes,
+      {this.text,
+      this.amount,
+      this.duration,
       this.id,
       this.createdAt,
       this.updatedAt});
@@ -18,13 +18,13 @@ class Copoun {
       id: json['_id'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
-      name: json['name'],
-      img: json['img'],
-      numOfDishes: json['numOfDishes']);
+      text: json['text'],
+      duration: json['duration'],
+      amount: json['amount']);
 
   Map<String, dynamic> toJson() =>
-      {'name': name, 'img': img, 'numOfDishes': numOfDishes};
+      {'text': text, 'duration': duration, 'amount': amount};
 
   Map<String, dynamic> toJsonForUpdate() =>
-      {'name': name, 'img': img, 'numOfDishes': numOfDishes, '_id': id};
+      {'text': text, 'duration': duration, 'amount': amount, '_id': id};
 }

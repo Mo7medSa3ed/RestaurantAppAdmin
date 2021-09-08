@@ -53,7 +53,7 @@ class User {
       address: jsondata['address'],
       fav: jsondata['fav'],
       history: List<Dish>.from(
-          jsondata['history'].map((e) => Dish.fromOneJsontoUser(e))),
+          (jsondata['history'] ?? []).map((e) => Dish.fromOneJsontoUser(e))),
       createdAt: jsondata['createdAt'],
       updatedAt: jsondata['updatedAt']);
   factory User.fromJson2(Map<String, dynamic> jsondata) => User(

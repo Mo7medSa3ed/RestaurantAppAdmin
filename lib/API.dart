@@ -22,6 +22,7 @@ class API {
         headers: await getHeaders(),
         body: json.encode(user.toJsonForLogin()));
     saveToken(res.headers['x-auth-token']);
+    print(res.body);
     return res;
   }
 
@@ -61,6 +62,7 @@ class API {
     );
     final body = utf8.decode(response.bodyBytes);
     final parsed = json.decode(body);
+    print(parsed);
     return parsed != null ? User.fromJson(parsed) : null;
   }
 
@@ -207,7 +209,7 @@ class API {
 
   static Future<dynamic> getAllCopouns() async {
     final res = await http.get(
-      '$_BaseUrl/copouns',
+      '$_BaseUrl/coupons',
       headers: await getHeaders(),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -231,7 +233,7 @@ class API {
 
   static Future<http.Response> deleteCopoun(String id) async {
     final res = await http.delete(
-      '$_BaseUrl/copouns/$id',
+      '$_BaseUrl/coupons/$id',
       headers: await getHeaders(),
     );
     return res;
@@ -248,7 +250,7 @@ class API {
   }
 
   static Future<http.Response> addCopoun(Map<String, dynamic> copoun) async {
-    final res = await http.post('$_BaseUrl/copoun/',
+    final res = await http.post('$_BaseUrl/coupons/',
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(copoun));

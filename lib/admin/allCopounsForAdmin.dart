@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
-import 'package:resturantapp/admin/allCategorysTable.dart';
+import 'package:resturantapp/admin/allCopounsTable.dart';
 import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/models/categorys.dart';
 import 'package:resturantapp/models/copoun.dart';
 import 'package:resturantapp/provider/appdata.dart';
 
@@ -15,6 +15,8 @@ import 'package:resturantapp/provider/appdata.dart';
 class AllCopounsForAdminScrean extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   String name;
+  String duration;
+  String amount;
   AppData app;
 
   @override
@@ -48,7 +50,7 @@ class AllCopounsForAdminScrean extends StatelessWidget {
               if (s.hasData) {
                 if (s.data['status'] && s.data['data'].length > 0) {
                   app.initCopounList(s.data['data'] as List<Copoun>);
-                  return AllCategoryTable();
+                  return AllCopounsTable();
                 }
                 return Center(
                     child: Container(
@@ -100,21 +102,68 @@ class AllCopounsForAdminScrean extends StatelessWidget {
                     ),
                     Form(
                       key: formKey,
-                      child: TextFormField(
-                        onSaved: (s) => name = s,
-                        validator: (String v) =>
-                            v.isEmpty ? 'please enter copoun name !!' : null,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(20),
-                            border: InputBorder.none,
-                            fillColor: greyw,
-                            hintText: 'Enter your copoun name...',
-                            hintStyle: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Kprimary.withOpacity(0.35)),
-                            filled: true),
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            onSaved: (s) => name = s,
+                            validator: (String v) => v.isEmpty
+                                ? 'please enter copoun name !!'
+                                : null,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(20),
+                                border: InputBorder.none,
+                                fillColor: greyw,
+                                hintText: 'Enter your copoun name...',
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Kprimary.withOpacity(0.35)),
+                                filled: true),
+                          ),
+                          SizedBox(height: 8),
+                          TextFormField(
+                            onSaved: (s) => duration = s,
+                            validator: (String v) => v.isEmpty
+                                ? 'please enter copoun duration !!'
+                                : null,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(20),
+                                border: InputBorder.none,
+                                fillColor: greyw,
+                                hintText: 'Enter your copoun duration...',
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Kprimary.withOpacity(0.35)),
+                                filled: true),
+                          ),
+                          SizedBox(height: 8),
+                          TextFormField(
+                            onSaved: (s) => amount = s,
+                            validator: (String v) => v.isEmpty
+                                ? 'please enter copoun amount !!'
+                                : null,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(20),
+                                border: InputBorder.none,
+                                fillColor: greyw,
+                                hintText: 'Enter your copoun amount...',
+                                hintStyle: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Kprimary.withOpacity(0.35)),
+                                filled: true),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(
@@ -159,7 +208,11 @@ class AllCopounsForAdminScrean extends StatelessWidget {
                                     text: "loading please wait....",
                                     barrierDismissible: false,
                                   );
-                                  final reqData = {"name": name};
+                                  final reqData = {
+                                    "text": name,
+                                    "duration": int.parse(duration),
+                                    "amount": int.parse(amount)
+                                  };
                                   final res = await API.addCopoun(reqData);
                                   if (res.statusCode == 200 ||
                                       res.statusCode == 201) {
@@ -185,7 +238,7 @@ class AllCopounsForAdminScrean extends StatelessWidget {
                                     Navigator.of(context).pop();
                                     CoolAlert.show(
                                         context: context,
-                                        type: CoolAlertType.loading,
+                                        type: CoolAlertType.error,
                                         title: 'Error',
                                         text: "some thing went error !!",
                                         barrierDismissible: false,

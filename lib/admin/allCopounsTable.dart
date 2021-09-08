@@ -2,7 +2,6 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:resturantapp/API.dart';
-import 'package:resturantapp/admin/allCopounsForAdmin.dart';
 import 'package:resturantapp/constants.dart';
 import 'package:resturantapp/models/copoun.dart';
 import 'package:resturantapp/provider/appdata.dart';
@@ -75,12 +74,17 @@ class _AllCopounsTableState extends State<AllCopounsTable> {
                 DataColumn(
                   label: Text('Copoun Name'),
                   onSort: (columnIndex, ascending) =>
-                      _sort<String>((d) => d.name, columnIndex, ascending),
+                      _sort<String>((d) => d.text, columnIndex, ascending),
                 ),
                 DataColumn(
-                  label: Text('N.O.Dishes'),
+                  label: Text('Duration'),
                   onSort: (columnIndex, ascending) =>
-                      _sort<num>((d) => d.numOfDishes, columnIndex, ascending),
+                      _sort<num>((d) => d.duration, columnIndex, ascending),
+                ),
+                DataColumn(
+                  label: Text('amount'),
+                  onSort: (columnIndex, ascending) =>
+                      _sort<num>((d) => d.amount, columnIndex, ascending),
                 ),
                 DataColumn(
                   label: Text('Date'),
@@ -148,8 +152,9 @@ class UDS extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       cells: [
-        DataCell(Text(copoun.name)),
-        DataCell(Center(child: Text(copoun.numOfDishes.toString()))),
+        DataCell(Text(copoun.text)),
+        DataCell(Center(child: Text(copoun.duration.toString()))),
+        DataCell(Center(child: Text(copoun.amount.toString()))),
         DataCell(Text(
             copoun.updatedAt == null ? '' : copoun.updatedAt.substring(0, 10))),
         DataCell(Center(
@@ -179,7 +184,7 @@ class UDS extends DataTableSource {
       return false;
     }
     final l =
-        copounList.where((element) => element.name.contains(value)).toList();
+        copounList.where((element) => element.text.contains(value)).toList();
     copounList = l;
     notifyListeners();
     return true;
