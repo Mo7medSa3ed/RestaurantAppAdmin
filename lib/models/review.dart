@@ -1,4 +1,4 @@
-import 'package:resturantapp/models/user.dart';
+import 'package:deliveryapp/models/user.dart';
 
 class Review {
   User user;
@@ -17,7 +17,7 @@ class Review {
       this.createdAt,
       this.updatedAt});
 
-  factory Review.fromJson(Map<String, dynamic>  json2) => Review(
+  factory Review.fromJson(Map<String, dynamic> json2) => Review(
       user: User.fromJsonReview(json2['user']),
       rate: json2['rate'],
       msg: json2['msg'],

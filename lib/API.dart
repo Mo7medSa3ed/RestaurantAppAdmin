@@ -3,13 +3,13 @@ import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/models/categorys.dart';
-import 'package:resturantapp/models/copoun.dart';
-import 'package:resturantapp/models/dish.dart';
-import 'package:resturantapp/models/review.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/models/categorys.dart';
+import 'package:deliveryapp/models/copoun.dart';
+import 'package:deliveryapp/models/dish.dart';
+import 'package:deliveryapp/models/review.dart';
 import 'dart:convert';
-import 'package:resturantapp/models/user.dart';
+import 'package:deliveryapp/models/user.dart';
 
 class API {
   static const String _BaseUrl = 'https://resturant-app12.herokuapp.com';
@@ -64,6 +64,17 @@ class API {
     final parsed = json.decode(body);
     print(parsed);
     return parsed != null ? User.fromJson(parsed) : null;
+  }
+
+  static Future<dynamic> getHome() async {
+    final response = await http.get(
+      '$_BaseUrl/stats/admin/home',
+      headers: await getHeaders(),
+    );
+    final body = utf8.decode(response.bodyBytes);
+    final parsed = json.decode(body);
+
+    return parsed != null ? parsed : null;
   }
 
   static Future<dynamic> getAllUser() async {

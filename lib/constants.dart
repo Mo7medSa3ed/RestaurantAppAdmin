@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/models/user.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/models/user.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const Kprimary = Color.fromRGBO(0, 8, 51, 1);
@@ -52,6 +52,13 @@ saveUsertoAppdata(user, context) {
   final parsed = json.decode(user);
   User u = User.fromJson(parsed);
   appdata.initLoginUser(u);
+}
+logout(context) async{
+  final prfs = await SharedPreferences.getInstance();
+  prfs.clear();
+  AppData appdata = Provider.of<AppData>(context, listen: false);
+  appdata.initLoginUser(null);
+
 }
 
 Future<Map<String, String>> getHeaders() async {

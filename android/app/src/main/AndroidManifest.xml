@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.resturantapp">
+    package="com.example.deliveryapp">
 
     <!--
      io.flutter.app.FlutterApplication is an android.app.Application that

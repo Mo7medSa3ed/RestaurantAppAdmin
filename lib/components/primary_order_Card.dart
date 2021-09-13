@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:resturantapp/admin/orderDetails.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/screans/ordertimeline.dart';
+import 'package:deliveryapp/admin/orderDetails.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/screans/ordertimeline.dart';
 
 class PrimaryOrderCard extends StatefulWidget {
   final order;
@@ -82,8 +82,8 @@ class _PrimaryOrderCardState extends State<PrimaryOrderCard> {
                           TextStyle(color: white, fontWeight: FontWeight.w500),
                     ),
                   )
-                : widget.order['state'].toString().toLowerCase().trim() !=
-                        "canceled"
+                : widget.order['state'].toString().toLowerCase().trim() ==
+                        "placed"
                     ? TextButton(
                         onPressed: widget.onPressed,
                         style: ButtonStyle(

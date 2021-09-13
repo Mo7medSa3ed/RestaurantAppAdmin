@@ -1,13 +1,13 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/admin/updateDish.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
-import 'package:resturantapp/models/dish.dart';
-import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/provider/special.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/admin/updateDish.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/custum_widget.dart';
+import 'package:deliveryapp/models/dish.dart';
+import 'package:deliveryapp/provider/appdata.dart';
+import 'package:deliveryapp/provider/special.dart';
 
 class AllDishesTable extends StatefulWidget {
   @override
@@ -74,7 +74,7 @@ class _AllDishesTableState extends State<AllDishesTable> {
               });
             },
             header: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8),
+              padding: EdgeInsets.symmetric(horizontal: 4),
               height: 50,
               width: double.infinity,
               decoration: BoxDecoration(

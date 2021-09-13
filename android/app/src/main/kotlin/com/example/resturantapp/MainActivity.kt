@@ -1,4 +1,4 @@
-package com.example.resturantapp
+package com.example.deliveryapp
 
 import android.content.Intent
 import android.media.MediaPlayer

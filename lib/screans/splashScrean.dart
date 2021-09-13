@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
-import 'package:resturantapp/models/user.dart';
-import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/screans/home.dart';
-import 'package:resturantapp/screans/loginScrean.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/custum_widget.dart';
+import 'package:deliveryapp/models/user.dart';
+import 'package:deliveryapp/provider/appdata.dart';
+import 'package:deliveryapp/screans/home.dart';
+import 'package:deliveryapp/screans/loginScrean.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 

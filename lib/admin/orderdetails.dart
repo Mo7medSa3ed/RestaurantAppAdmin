@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/models/user.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/models/user.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 
@@ -23,8 +23,8 @@ class _OrderDetailsScrean2State extends State<OrderDetailsScrean2> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isExist = false;
-  Position position ;
-  List<Address> addresses ;
+  Position position;
+  List<Address> addresses;
 
   getcurrantLocation(dish) async {
     final coordinates =
@@ -338,7 +338,7 @@ class _OrderDetailsScrean2State extends State<OrderDetailsScrean2> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RatingBar.builder(
-                    onRatingUpdate: (v){},
+                    onRatingUpdate: (v) {},
                     itemSize: 14,
                     initialRating: d['dish']['rating'].toDouble(),
                     minRating: 1,

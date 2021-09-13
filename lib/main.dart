@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/provider/special.dart';
-import 'package:resturantapp/screans/splashScrean.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/provider/appdata.dart';
+import 'package:deliveryapp/provider/special.dart';
+import 'package:deliveryapp/screans/splashScrean.dart';
 
 void main() {
   runApp(MyApp());

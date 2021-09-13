@@ -1,5 +1,5 @@
-import 'package:resturantapp/models/dish.dart';
-import 'package:resturantapp/models/user.dart';
+import 'package:deliveryapp/models/dish.dart';
+import 'package:deliveryapp/models/user.dart';
 
 class Order {
   String id;

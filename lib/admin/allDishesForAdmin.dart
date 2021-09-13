@@ -2,12 +2,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/admin/addDish.dart';
-import 'package:resturantapp/admin/allDishesTable.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/models/dish.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/admin/addDish.dart';
+import 'package:deliveryapp/admin/allDishesTable.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/models/dish.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 
 // ignore: must_be_immutable
 class AllDishesForAdminScrean extends StatelessWidget {

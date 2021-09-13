@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:resturantapp/models/copoun.dart';
-import 'package:resturantapp/models/dish.dart';
-import 'package:resturantapp/models/order.dart';
-import 'package:resturantapp/models/user.dart';
-import 'package:resturantapp/models/categorys.dart';
+import 'package:deliveryapp/models/copoun.dart';
+import 'package:deliveryapp/models/dish.dart';
+import 'package:deliveryapp/models/order.dart';
+import 'package:deliveryapp/models/user.dart';
+import 'package:deliveryapp/models/categorys.dart';
 
 class AppData extends ChangeNotifier {
   User loginUser;
@@ -52,6 +52,7 @@ class AppData extends ChangeNotifier {
   initCategoryList(List<Categorys> list) {
     categoryList = list;
   }
+
   initCopounList(List<Copoun> list) {
     copounList = list;
   }
@@ -65,7 +66,7 @@ class AppData extends ChangeNotifier {
     categoryList.add(c);
     notifyListeners();
   }
-  
+
   addtoCopoun(c) {
     copounList.add(c);
     notifyListeners();

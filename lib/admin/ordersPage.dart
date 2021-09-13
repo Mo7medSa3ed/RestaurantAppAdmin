@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/components/primary_orders_widget.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/components/primary_orders_widget.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 
@@ -23,10 +23,9 @@ class _HomeState extends State<OrdersPage> {
   }
 
   requestPermissions() async {
-    await Geolocator.isLocationServiceEnabled();
-    await Geolocator.requestPermission();
-    await Geolocator.checkPermission();
-  }
+    if (await Geolocator.isLocationServiceEnabled())
+      await Geolocator.requestPermission();
+  } 
 
   @override
   void initState() {

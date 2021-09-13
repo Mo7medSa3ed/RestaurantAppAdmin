@@ -2,7 +2,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:resturantapp/constants.dart';
+import 'package:deliveryapp/constants.dart';
 
 class CustumTextField extends StatefulWidget {
   final String hint;
@@ -120,4 +120,3 @@ showSnackbarWidget({msg, context, icon}) {
     barrierDismissible: false,
   );
 }
-

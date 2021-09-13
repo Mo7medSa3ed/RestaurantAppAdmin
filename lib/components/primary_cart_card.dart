@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 
 class PrimaryCartCard extends StatefulWidget {
   final dish;

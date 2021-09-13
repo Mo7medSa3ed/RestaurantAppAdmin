@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/screans/homepage.dart';
-import 'package:resturantapp/screans/maindrawer.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/provider/appdata.dart';
+import 'package:deliveryapp/screans/homepage.dart';
+import 'package:deliveryapp/screans/maindrawer.dart';
 
 class Home extends StatefulWidget {
   @override

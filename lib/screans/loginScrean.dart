@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
-import 'package:resturantapp/screans/loginbody.dart';
-import 'package:resturantapp/size_config.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/custum_widget.dart';
+import 'package:deliveryapp/screans/loginbody.dart';
+import 'package:deliveryapp/size_config.dart';
 import 'package:connectivity/connectivity.dart';
 
 class LoginScrean extends StatefulWidget {

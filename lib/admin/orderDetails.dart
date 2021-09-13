@@ -2,12 +2,12 @@ import 'dart:ui';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/components/primart_elevatedButtom.dart';
-import 'package:resturantapp/components/primary_cart_card.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/models/order.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/components/primart_elevatedButtom.dart';
+import 'package:deliveryapp/components/primary_cart_card.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/models/order.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 

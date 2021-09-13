@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 
 class PrimaryFlatButton extends StatelessWidget {
   final onPressed;

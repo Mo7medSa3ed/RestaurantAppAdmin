@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/components/primart_elevatedButtom.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
-import 'package:resturantapp/models/user.dart';
-import 'package:resturantapp/provider/special.dart';
-import 'package:resturantapp/screans/home.dart';
-import 'package:resturantapp/size_config.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/components/primart_elevatedButtom.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/custum_widget.dart';
+import 'package:deliveryapp/models/user.dart';
+import 'package:deliveryapp/provider/special.dart';
+import 'package:deliveryapp/screans/home.dart';
+import 'package:deliveryapp/size_config.dart';
 
 class LoginBody extends StatefulWidget {
   @override

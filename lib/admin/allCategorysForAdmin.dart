@@ -4,11 +4,11 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/admin/allCategorysTable.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/models/categorys.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/admin/allCategorysTable.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/models/categorys.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 
 // ignore: must_be_immutable
 class AllCategoriesForAdminScrean extends StatelessWidget {

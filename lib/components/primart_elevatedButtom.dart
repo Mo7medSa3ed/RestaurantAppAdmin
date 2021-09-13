@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:resturantapp/constants.dart';
+import 'package:deliveryapp/constants.dart';
 
 class PrimaryElevatedButton extends StatelessWidget {
   final onpressed;

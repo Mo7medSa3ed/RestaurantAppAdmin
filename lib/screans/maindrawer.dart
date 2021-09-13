@@ -1,10 +1,13 @@
+import 'package:deliveryapp/provider/appdata.dart';
 import 'package:flutter/material.dart';
-import 'package:resturantapp/admin/allCategorysForAdmin.dart';
-import 'package:resturantapp/admin/allCopounsForAdmin.dart';
-import 'package:resturantapp/admin/allDishesForAdmin.dart';
-import 'package:resturantapp/admin/allUsersForAdmin.dart';
-import 'package:resturantapp/admin/ordersPage.dart';
-import 'package:resturantapp/constants.dart';
+import 'package:deliveryapp/admin/allCategorysForAdmin.dart';
+import 'package:deliveryapp/admin/allCopounsForAdmin.dart';
+import 'package:deliveryapp/admin/allDishesForAdmin.dart';
+import 'package:deliveryapp/admin/allUsersForAdmin.dart';
+import 'package:deliveryapp/admin/ordersPage.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/screans/loginScrean.dart';
+import 'package:provider/provider.dart';
 
 class MainDrawer extends StatelessWidget {
   @override
@@ -21,34 +24,48 @@ class MainDrawer extends StatelessWidget {
                       color: Kprimary.withOpacity(0.95),
                       borderRadius: BorderRadius.circular(8)),
                   accountName: Text(
-                    "Mohamed Saeed",
+                    Provider.of<AppData>(context, listen: false)
+                            .loginUser
+                            .name ??
+                        "",
                     style: TextStyle(fontSize: 14),
                   ),
                   accountEmail: Text(
-                    "mohamedsaeed@gmail.com",
+                    Provider.of<AppData>(context, listen: false)
+                            .loginUser
+                            .email ??
+                        "",
                     style: TextStyle(fontSize: 12),
                   ),
                 )),
             ListTile(
-              title: Text("All Dishes"),
+              title: Text("Dishes"),
               onTap: () => go(AllDishesForAdminScrean(), context),
             ),
             ListTile(
-              title: Text("All Users"),
+              title: Text("Users"),
               onTap: () => go(AllUsersForAdminScrean(), context),
             ),
             ListTile(
-              title: Text("All Categories"),
+              title: Text("Categories"),
               onTap: () => go(AllCategoriesForAdminScrean(), context),
             ),
             ListTile(
-              title: Text("All Orders"),
+              title: Text("Orders"),
               onTap: () => go(OrdersPage(), context),
             ),
             ListTile(
-              title: Text("All Copouns"),
+              title: Text("Copouns"),
               onTap: () => go(AllCopounsForAdminScrean(), context),
             ),
+            ListTile(
+                title: Text("Logout"),
+                onTap: () async{
+                  await logout(context);
+                  return Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (_) => LoginScrean()),
+                      (route) => false);
+                }),
           ],
         ),
       ),

@@ -1,4 +1,4 @@
-import 'package:resturantapp/models/dish.dart';
+import 'package:deliveryapp/models/dish.dart';
 
 class User {
   String id;

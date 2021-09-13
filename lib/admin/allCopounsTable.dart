@@ -1,11 +1,11 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/models/copoun.dart';
-import 'package:resturantapp/provider/appdata.dart';
-import 'package:resturantapp/provider/special.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/models/copoun.dart';
+import 'package:deliveryapp/provider/appdata.dart';
+import 'package:deliveryapp/provider/special.dart';
 
 class AllCopounsTable extends StatefulWidget {
   @override
@@ -57,7 +57,7 @@ class _AllCopounsTableState extends State<AllCopounsTable> {
                 });
               },
               header: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: EdgeInsets.symmetric(horizontal: 4),
                 height: 50,
                 width: double.infinity,
                 decoration: BoxDecoration(

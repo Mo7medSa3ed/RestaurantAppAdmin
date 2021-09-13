@@ -4,10 +4,10 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/components/primary_order_Card.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/components/primary_order_Card.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 
 class OrdersWidget extends StatefulWidget {
   final state;
@@ -83,7 +83,9 @@ class _OrdersWidgetState extends State<OrdersWidget> {
             return SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
               child: Center(
-                child: SpinKitCircle(color: Kprimary,),
+                child: SpinKitCircle(
+                  color: Kprimary,
+                ),
               ),
             );
           }

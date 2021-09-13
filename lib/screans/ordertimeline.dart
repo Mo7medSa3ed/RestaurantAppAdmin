@@ -3,8 +3,8 @@ import 'dart:collection';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/constants.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/constants.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class OrderTimeLine extends StatefulWidget {

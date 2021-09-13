@@ -1,4 +1,4 @@
-import 'package:resturantapp/models/review.dart';
+import 'package:deliveryapp/models/review.dart';
 
 class Dish {
   String id;

@@ -4,13 +4,13 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_below/dropdown_below.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:resturantapp/API.dart';
-import 'package:resturantapp/constants.dart';
-import 'package:resturantapp/custum_widget.dart';
-import 'package:resturantapp/models/user.dart';
-import 'package:resturantapp/provider/appdata.dart';
+import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/constants.dart';
+import 'package:deliveryapp/custum_widget.dart';
+import 'package:deliveryapp/models/user.dart';
+import 'package:deliveryapp/provider/appdata.dart';
 
-import 'package:resturantapp/provider/special.dart';
+import 'package:deliveryapp/provider/special.dart';
 
 class AllUsersTable extends StatefulWidget {
   AllUsersTable();
@@ -68,7 +68,7 @@ class _AllUsersTableState extends State<AllUsersTable> {
                 });
               },
               header: Container(
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: EdgeInsets.symmetric(horizontal: 4),
                 height: 50,
                 width: double.infinity,
                 decoration: BoxDecoration(
