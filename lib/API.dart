@@ -22,7 +22,6 @@ class API {
         headers: await getHeaders(),
         body: json.encode(user.toJsonForLogin()));
     saveToken(res.headers['x-auth-token']);
-    print(res.body);
     return res;
   }
 
@@ -32,7 +31,6 @@ class API {
         headers: await getHeaders(),
         body: json.encode(user.toJsonForSignup()));
     // saveToken(res.headers['x-auth-token']);
-    print(res.body);
     return res;
   }
 
@@ -62,7 +60,6 @@ class API {
     );
     final body = utf8.decode(response.bodyBytes);
     final parsed = json.decode(body);
-    print(parsed);
     return parsed != null ? User.fromJson(parsed) : null;
   }
 
@@ -103,7 +100,6 @@ class API {
     if (res.statusCode == 200 || res.statusCode == 201) {
       final body = utf8.decode(res.bodyBytes);
       final parsed = json.decode(body).cast<Map<String, dynamic>>();
-      print(parsed);
       final dishList = parsed.map<Dish>((dish) => Dish.fromJson(dish)).toList();
       return {"status": true, "data": dishList};
     } else {
@@ -146,7 +142,6 @@ class API {
         encoding: Encoding.getByName("utf-8"),
         headers: await getHeaders(),
         body: json.encode(updatedDish));
-    print(res);
     return res;
   }
 

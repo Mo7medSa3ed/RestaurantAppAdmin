@@ -383,7 +383,6 @@ class _AddDishScreanState extends State<AddDishScrean> {
       dio.options.headers["x-app-type"] = 'Admin';
       final res = await dio
           .post('https://resturant-app12.herokuapp.com/dishes/', data: form);
-      print(res.data);
       if (res.statusCode == 200 || res.statusCode == 201) {
         res.data['category'] = {'name': selectedCategory};
         final newDish = Dish.fromJson(res.data);

@@ -67,9 +67,7 @@ class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
               future: API.getOneOrder(widget.id),
               builder: (ctx, v) {
                 if (v.hasData) {
-                  print(v.data['data']);
                   detailsOrder = Order.fromJson(v.data['data']);
-                  print(detailsOrder.state);
                   app.initOrder(detailsOrder);
 
                   check = app.detailsOrder.state.toLowerCase() == 'delivered' ||
