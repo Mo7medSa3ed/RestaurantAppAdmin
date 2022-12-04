@@ -12,7 +12,7 @@ import 'dart:convert';
 import 'package:deliveryapp/models/user.dart';
 
 class API {
-  static const String _BaseUrl = 'https://resturant-app12.herokuapp.com';
+  static const String _BaseUrl = 'https://restaurant-api-xj7i.onrender.com';
 
   // Functions For User
 

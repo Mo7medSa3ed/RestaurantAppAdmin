@@ -18,11 +18,7 @@ class _PrimaryOrderCardState extends State<PrimaryOrderCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => OrderDetailsScrean(
-                id: widget.order['_id'],
-                lat: widget.order['distLocation'][1],
-                lng: widget.order['distLocation'][0],
-              ))),
+          builder: (_) => OrderDetailsScrean2(widget.order['_id']))),
       child: Card(
         elevation: 5,
         child: Column(
