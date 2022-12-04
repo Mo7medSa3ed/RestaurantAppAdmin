@@ -1,4 +1,4 @@
-package com.example.deliveryapp
+package com.example.adminapp
 
 import android.content.Intent
 import android.media.MediaPlayer
@@ -9,11 +9,4 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
 
-class MainActivity: FlutterActivity() {
-
-
-
-  
-
-
-}
+class MainActivity: FlutterActivity() {}

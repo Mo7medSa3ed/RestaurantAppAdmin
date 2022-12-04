@@ -1,6 +1,6 @@
+import 'package:deliveryapp/admin/orderdetails.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:deliveryapp/admin/orderDetails.dart';
 import 'package:deliveryapp/constants.dart';
 import 'package:deliveryapp/screans/ordertimeline.dart';
 

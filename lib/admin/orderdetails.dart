@@ -1,468 +1,317 @@
-import 'dart:ui';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:deliveryapp/API.dart';
+import 'package:deliveryapp/components/primart_elevatedButtom.dart';
+import 'package:deliveryapp/components/primary_cart_card.dart';
 import 'package:deliveryapp/constants.dart';
-import 'package:deliveryapp/models/user.dart';
+import 'package:deliveryapp/models/order.dart';
 import 'package:deliveryapp/provider/appdata.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 
-class OrderDetailsScrean2 extends StatefulWidget {
+class OrderDetailsScrean extends StatefulWidget {
   final id;
-  OrderDetailsScrean2(this.id);
+  final lat;
+  final lng;
+  OrderDetailsScrean({this.id, this.lat, this.lng});
   @override
-  _OrderDetailsScrean2State createState() => _OrderDetailsScrean2State();
+  _OrderDetailsScreanState createState() => _OrderDetailsScreanState();
 }
 
-class _OrderDetailsScrean2State extends State<OrderDetailsScrean2> {
+class _OrderDetailsScreanState extends State<OrderDetailsScrean> {
   AppData app;
-  User user;
-
+  bool check;
+  final formKey = GlobalKey<FormState>();
+  final formKey2 = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  String address;
+  String promo;
   bool isExist = false;
   Position position;
   List<Address> addresses;
+  Order detailsOrder;
 
-  getcurrantLocation(dish) async {
-    final coordinates =
-        new Coordinates(dish['distLocation'][0], dish['distLocation'][1]);
+  // getcurrantLocation() async {
+  //   await Geolocator.isLocationServiceEnabled();
+  //   await Geolocator.requestPermission();
+  //   await Geolocator.checkPermission();
+  //   position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //   final coordinates = new Coordinates(position.latitude, position.longitude);
+  //   addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+  //   setState(() {});
+  // }
+
+  getAddress(position) async {
+    final coordinates = new Coordinates(position.latitude, position.longitude);
     addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
     setState(() {});
   }
 
-  g() async {
-    await Geolocator.isLocationServiceEnabled();
-    await Geolocator.requestPermission();
-    await Geolocator.checkPermission();
-  }
-
   @override
   void initState() {
-    super.initState();
-    g();
     app = Provider.of<AppData>(context, listen: false);
+    position = Position(latitude: widget.lat, longitude: widget.lng);
+    getAddress(position);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: white.withOpacity(0.97),
       body: SafeArea(
-        child: FutureBuilder(
-          future: API.getOneOrder(widget.id),
-          builder: (c, v) {
-            if (v.hasData) {
-              final dish = v.data;
-              user = app.usersList.firstWhere((e) => e.id == dish['deliveryId'],
-                  orElse: () => null);
-              getcurrantLocation(dish);
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Consumer<AppData>(
-                    builder: (ctx, v, c) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Order Details',
-                                          style: TextStyle(
-                                              color: Kprimary,
-                                              fontSize: 34,
-                                              fontWeight: FontWeight.w800,
-                                              letterSpacing: 1),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        IconButton(
-                                          icon: Icon(
-                                            Icons.close,
-                                            color: red,
-                                            size: 35,
-                                          ),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text(
-                                          'CUSTOMER ADDRESS',
-                                          style: TextStyle(
-                                              color: Kprimary.withOpacity(0.7),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w800,
-                                              letterSpacing: 1),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      "${addresses == null ? "address loading please wait..... " : addresses.first.addressLine}",
-                                      style: TextStyle(
-                                          color: Kprimary.withOpacity(0.35),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: 1),
-                                      softWrap: true,
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Text(
-                                      'ITEMS',
-                                      style: TextStyle(
-                                          color: Kprimary.withOpacity(0.35),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w800,
-                                          letterSpacing: 1),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    Column(
-                                      children: dish['items']
-                                          .map<Widget>((e) => foodCard(e))
-                                          .toList(),
-                                    ),
-                                  ],
-                                ),
+          child: FutureBuilder<dynamic>(
+              future: API.getOneOrder(widget.id),
+              builder: (ctx, v) {
+                if (v.hasData) {
+                  detailsOrder = Order.fromJson(v.data['data']);
+                  app.initOrder(detailsOrder);
+
+                  check = app.detailsOrder.state.toLowerCase() == 'delivered' ||
+                      app.detailsOrder.state.toLowerCase() == 'canceled';
+                  return Consumer<AppData>(
+                    builder: (ctx, app, c) => Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            physics: AlwaysScrollableScrollPhysics(
+                                parent: BouncingScrollPhysics()),
+                            children: [
+                              SizedBox(
+                                height: 8,
                               ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                  color: grey.withOpacity(0.70),
-                                  spreadRadius: 1.5,
-                                  blurRadius: 8,
-                                ),
-                              ], borderRadius: BorderRadius.circular(10)),
-                            ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  height: 18,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 70,
-                                      height: 70,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          image: DecorationImage(
-                                              image: AssetImage(
-                                                  'assets/images/del.png' /* dish['items']
-                                                      [0]['dish']['img']
-                                                  .toString()
-                                                  .replaceAll('http', 'https') */
-                                                  ),
-                                              fit: BoxFit.fill)),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Order Details',
+                                    style: TextStyle(
+                                        color: Kprimary,
+                                        fontSize: 34,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: 1),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.close,
+                                      color: red,
+                                      size: 35,
                                     ),
-                                    SizedBox(
-                                      width: 20,
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'SHIPPING ADDRESS',
+                                    style: TextStyle(
+                                        color: Kprimary.withOpacity(0.35),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: 1),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: Kprimary.withOpacity(0.35),
+                                      size: 30,
                                     ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Mohamed Saeed', //'${user.name}',
-                                          style: TextStyle(
-                                              color: Kprimary.withOpacity(0.8),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              letterSpacing: 1),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          '01017030127', // '${user.phone}',
-                                          style: TextStyle(
-                                              color: Kprimary.withOpacity(0.4),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              letterSpacing: 1),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 12,
-                                ),
-                                Row(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'TOTAL',
-                                          style: TextStyle(
-                                              color: Kprimary.withOpacity(0.20),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              letterSpacing: 1),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          '\$ ${dish['sum']} ',
-                                          style: TextStyle(
-                                              color: red,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w700,
-                                              letterSpacing: 1),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          'Delivary charge included',
-                                          style: TextStyle(
-                                              color: Kprimary.withOpacity(0.35),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                              letterSpacing: 1),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                      ],
-                                    ),
-                                    Spacer(),
-                                    Container(
-                                        alignment: Alignment.center,
-                                        height: 60,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.3,
-                                        decoration: BoxDecoration(
-                                            color: red,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Text(
-                                          "${dish['state'].toString().toUpperCase()}",
-                                          style: TextStyle(
-                                              color: greyw2, fontSize: 18),
+                                    onPressed: () {},
+                                  )
+                                ],
+                              ),
+                              Text(
+                                app.detailsOrder.user.name,
+                                style: TextStyle(
+                                    color: Kprimary.withOpacity(0.85),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 1),
+                                textAlign: TextAlign.start,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                addresses != null
+                                    ? addresses.first.addressLine
+                                    : app.detailsOrder.address ?? '',
+                                style: TextStyle(
+                                    color: Kprimary.withOpacity(0.35),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1),
+                                softWrap: true,
+                                textAlign: TextAlign.start,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                'ITEMS',
+                                style: TextStyle(
+                                    color: Kprimary.withOpacity(0.35),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 1),
+                                textAlign: TextAlign.start,
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Column(
+                                children: app.detailsOrder.items
+                                    .map((e) => PrimaryCartCard(
+                                          e.dish,
+                                          details: true,
+                                          amount: e.amount,
+                                          test: check ? false : true,
                                         ))
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        )),
-              );
-            } else {
-              return SpinKitCircle(
-                color: Kprimary,
-              );
-            }
-          },
-        ),
-      ),
+                                    .toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        bootomSheet()
+                      ],
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              })),
     );
   }
 
-  Widget foodCard(d) {
+  Widget bootomSheet() {
     return Container(
-      width: double.infinity,
-      height: 102,
-      margin: EdgeInsets.only(bottom: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 140,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: NetworkImage(
-                        d['dish']['img'].replaceAll('http', 'https')),
-                    fit: BoxFit.cover)),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                d['dish']['name'],
-                style: TextStyle(
-                    color: Kprimary, fontSize: 18, fontWeight: FontWeight.w800),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RatingBar.builder(
-                    onRatingUpdate: (v) {},
-                    itemSize: 14,
-                    initialRating: d['dish']['rating'].toDouble(),
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
-                    itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.amber[800],
-                    ),
-                  ),
-                  Text(
-                    '(${d['dish']['reviews'].length} review)',
-                    style: TextStyle(
-                        color: Kprimary.withOpacity(0.35),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600),
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(color: white, boxShadow: [
+          BoxShadow(
+            color: grey[350].withOpacity(0.95),
+            spreadRadius: 0.5,
+            blurRadius: 20,
+          )
+        ]),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            check
+                ? Column(
+                    children: [
+                      Form(
+                        key: formKey2,
+                        child: TextFormField(
+                          onSaved: (String v) =>
+                              v.isNotEmpty ? promo = v : null,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(20),
+                              border: InputBorder.none,
+                              fillColor: greyw,
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 16.0, left: 12.0, bottom: 2),
+                                child: Icon(
+                                  Icons.local_offer_rounded,
+                                  size: 35,
+                                  color: red,
+                                ),
+                              ),
+                              hintText: 'Add Promo Code',
+                              hintStyle: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Kprimary.withOpacity(0.35)),
+                              filled: true),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                    ],
                   )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${d['dish']['numOfPieces']} Pieces',
-                    style: TextStyle(
-                        color: Kprimary.withOpacity(0.35),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Text(
-                    '\$ ${d['dish']['price']}',
-                    style: TextStyle(
-                        color: red, fontSize: 16, fontWeight: FontWeight.w800),
-                  ),
-                ],
-              ),
-              Container(
-                width: (MediaQuery.of(context).size.width) - 188,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                : Container(),
+            Row(
+              children: [
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.indeterminate_check_box_outlined,
-                      color: Kprimary.withOpacity(0.35),
+                    Text(
+                      'TOTAL',
+                      style: TextStyle(
+                          color: Kprimary.withOpacity(0.20),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1),
+                      textAlign: TextAlign.start,
                     ),
                     SizedBox(
-                      width: 15,
+                      height: 5,
                     ),
-                    Text('${d['amount']}'),
+                    Text(
+                      '\$ ${calctotal()} ',
+                      style: TextStyle(
+                          color: red,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1),
+                      textAlign: TextAlign.start,
+                    ),
                     SizedBox(
-                      width: 15,
+                      height: 5,
                     ),
-                    Icon(
-                      Icons.add_box_outlined,
-                      color: Kprimary.withOpacity(0.35),
+                    Text(
+                      'Delivary charge included',
+                      style: TextStyle(
+                          color: Kprimary.withOpacity(0.35),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1),
+                      textAlign: TextAlign.start,
                     ),
                   ],
                 ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  /*  makeOrder() async {
-    if (position == null) {
-      await getcurrantLocation();
-      return;
-    }
-    formKey2.currentState.save();
-    showDialogWidget(context);
-    final reqData = {
-      "userId": app.loginUser.id,
-      "state": "placed",
-      "distLocation": [position.longitude, position.latitude],
-      "items":
-          app.cartList.map((e) => {"dishId": e.id, "amount": e.amount}).toList()
-    };
-
-    final res = await API.makeOrder(reqData);
-
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      app.cartList = [];
-      app.address = null;
-      app.notifyListeners();
-      Navigator.of(context).pop();
-
-      CoolAlert.show(
-        context: context,
-        type: CoolAlertType.success,
-        title: 'ORDER',
-        text: "Order completed successfully!",
-        barrierDismissible: false,
-        //flareAnimationName: "static",
-        confirmBtnColor: Kprimary,
-        onConfirmBtnTap: () => Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => Home()),
-            (Route<dynamic> route) => false),
-      );
-    } else {
-      Navigator.of(context).pop();
-      showSnackbar(context: context, msg: 'something went wrong !!');
-    }
+                Spacer(),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: PrimaryElevatedButton(
+                        text: check ? "RE ORDER" : "CANCEL",
+                        onpressed: () async => app.detailsOrder.state
+                                        .toLowerCase() ==
+                                    'delivered' ||
+                                app.detailsOrder.state.toLowerCase() == 'cancel'
+                            ? null
+                            : await cancelOrder(widget.id)))
+              ],
+            ),
+          ],
+        ));
   }
 
   String calctotal() {
     double sum = 0.0;
-    app.cartList.forEach((e) {
-      sum += (e.price * e.amount);
+    app.detailsOrder.items.forEach((e) {
+      sum += (e.dish.price * e.amount);
     });
     return sum.toString();
   }
 
   showSnackbar({msg, context, icon}) {
-    scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       elevation: 2,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -480,5 +329,52 @@ class _OrderDetailsScrean2State extends State<OrderDetailsScrean2> {
       backgroundColor: Kprimary,
     ));
   }
- */
+
+  cancelOrder(id) async {
+    CoolAlert.show(
+      context: context,
+      type: CoolAlertType.warning,
+      title: 'Cancel Order',
+      text: "Are you sure to cancel order ?",
+      barrierDismissible: false,
+      confirmBtnColor: red,
+      showCancelBtn: true,
+      onConfirmBtnTap: () async {
+        Navigator.of(context).pop();
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.loading,
+          text: "loading please wait....",
+          barrierDismissible: false,
+        );
+        final reqData = {"state": "canceled"};
+        final res = await API.patchOrder(reqData, id);
+        if (res.statusCode == 200 || res.statusCode == 201) {
+          Navigator.of(context).pop();
+          app.changeOrderState(widget.id);
+          CoolAlert.show(
+              context: context,
+              type: CoolAlertType.success,
+              animType: CoolAlertAnimType.scale,
+              title: 'Cancel Order',
+              text: "Order Canceled Successfully",
+              barrierDismissible: false,
+              confirmBtnColor: Kprimary,
+              onConfirmBtnTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              });
+        } else {
+          Navigator.of(context).pop();
+          CoolAlert.show(
+              context: context,
+              type: CoolAlertType.loading,
+              title: 'Error',
+              text: "some thing went error !!",
+              barrierDismissible: false,
+              showCancelBtn: true);
+        }
+      },
+    );
+  }
 }
