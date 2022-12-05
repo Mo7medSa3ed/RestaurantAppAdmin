@@ -13,7 +13,7 @@ import 'package:deliveryapp/models/user.dart';
 
 class API {
   static const String _BaseUrl = 'https://restaurant-api-xj7i.onrender.com';
-
+  static String get getBaseUrl => _BaseUrl;
   // Functions For User
 
   static Future<http.Response> loginUser(User user) async {

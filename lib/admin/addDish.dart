@@ -1,4 +1,5 @@
 import 'package:cool_alert/cool_alert.dart';
+import 'package:deliveryapp/API.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -381,8 +382,7 @@ class _AddDishScreanState extends State<AddDishScrean> {
       Dio dio = new Dio();
       dio.options.headers["x-auth-token"] = await getToken();
       dio.options.headers["x-app-type"] = 'Admin';
-      final res = await dio
-          .post('https://resturant-app12.herokuapp.com/dishes/', data: form);
+      final res = await dio.post('${API.getBaseUrl}/dishes/', data: form);
       if (res.statusCode == 200 || res.statusCode == 201) {
         res.data['category'] = {'name': selectedCategory};
         final newDish = Dish.fromJson(res.data);
